@@ -47,11 +47,32 @@ public class BoardDAO {
 			}
 			return list;
 		}
-		
 	}
 	
 	
-	
+	public BoardDTO showContents(int board_seq) throws Exception {
+		String sql ="select * from board2 where board_seq=?";
+		BoardDTO dto = new BoardDTO();
+		try(Connection con = this.getConnection();
+				PreparedStatement pstat =con.prepareStatement(sql)){
+			pstat.setInt(1, board_seq);
+			try(ResultSet rs =pstat.executeQuery();){
+				if(rs.next()) {
+					dto.setBoard_seq(rs.getInt("board_seq"));
+					dto.setId(rs.getNString("id"));
+					dto.setTitle(rs.getString("title"));
+					dto.setContent(rs.getString("content"));
+					dto.setWrite_date(rs.getDate("write_date"));
+					dto.setView_count(rs.getInt("view_count"));
+				}
+				return dto;
+			}
+		}
+		
+		
+		
+		
+	}
 	
 	
 	

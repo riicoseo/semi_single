@@ -37,9 +37,19 @@ public class BoardController extends HttpServlet {
 			response.setCharacterEncoding("utf-8");
 			response.getWriter().append(slist);
 		
-		}else if(cmd.contentEquals("/")) {
+		}else if(cmd.contentEquals("/write.bor")) {
+			response.sendRedirect("BoardWritePage.jsp");
+		
+		}else if(cmd.contentEquals("/showContents.bor")) {
+			int board_seq = Integer.parseInt(request.getParameter("board_seq"));
+			BoardDTO dto = dao.showContents(board_seq);
 			
+			request.setAttribute("dto", dto);
+			request.getRequestDispatcher("/detail????").forward(request, response);
+		}else if(cmd.contentEquals("/save.bor")) {
+			System.out.println("도착했음!!!");
 		}
+		
 		
 		
 		

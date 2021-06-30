@@ -155,7 +155,7 @@ $(function(){
 			
 			let td2= $("<td>");
 			let td2a=$("<a>");
-			td2a.attr("href","showContents.bor?seq="+resp[i].board_seq);
+			td2a.attr("href","showContents.bor?board_seq="+resp[i].board_seq);
 			td2a.append(resp[i].title);
 			td2.append(td2a);
 			td2.attr("class","d-sm-table-cell");
@@ -190,7 +190,9 @@ $(function(){
 	
 	
 	
-	
+	$("#writeBtn").on("click",function(){
+		location.href ="write.bor"
+	})
 	
 	
 	

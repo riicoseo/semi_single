@@ -55,7 +55,22 @@ label{
 
 
 <script>
-        $(document).ready(function(){
+$(function(){
+	$("#backBtn").on("click",function(){
+		location.href =	"javascript:history.back()";
+		//location.href = "Ajax_BoardMainPage.jsp";
+	})
+	
+	
+})
+
+
+
+
+
+
+
+$(document).ready(function(){
    
    $('#summernote').summernote({
           placeholder: 'Write contents',
@@ -64,8 +79,6 @@ label{
           maxHeight: 300,             // set maximum height of editor
         });
 })
-
-
 
 $(function() {
   $('#summernote').summernote({
@@ -102,8 +115,9 @@ $('#summernote').summernote('code', markupStr);
 		</div>
     </div>
 
-
+	
     <div class="row">
+    <form id="frm" action="save.bor" type="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
@@ -144,13 +158,18 @@ $('#summernote').summernote('code', markupStr);
     <div class="row">
       <hr>
       <div class="col-12">
-        <button type="button" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
-        <div class="pull-right"><a href="#" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
+        <button type="button" id="backBtn" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
+        <div class="pull-right"><a href="javascript:frm.submit();" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
       </div> 
     </div>
 
     </div>
 
+
+<div>
+<input type="hidden" >
+
+</div>
 
 </body>
 </html>
