@@ -111,7 +111,7 @@
 }
 
 
-/* 2번 스타일 검색바 */
+/* 2번 스타일 검색바    선택*/   
 .search{
 	overflow: hidden;
 	margin-top: 45px;
@@ -126,7 +126,7 @@
 	width:320px
 }
 
-#writeBtnDiv{
+/* #writeBtnDiv{ */
 padding:0;
 }
 #writeBtn{
@@ -138,60 +138,8 @@ float:right;
 <script>
 $(function(){
 	
-	$.ajax({
-		url:"boardlist.bor",
-		type:"post",
-		dataType:"json"
-	}).done(function(resp){
-		
-		for(i=0; i<resp.length;i++){
-			
-			let tr = $("<tr>");
-			
-			let td1= $("<td>");
-			td1.append(resp[i].board_seq);
-			td1.attr("class","d-sm-table-cell");
-			td1.attr("style","width:7%");
-			
-			let td2= $("<td>");
-			let td2a=$("<a>");
-			td2a.attr("href","showContents.bor?board_seq="+resp[i].board_seq);
-			td2a.append(resp[i].title);
-			td2.append(td2a);
-			td2.attr("class","d-sm-table-cell");
-			td2.attr("style","width:50%");
-			
-			let td3= $("<td>");
-			td3.append(resp[i].id);
-			td3.attr("class","d-sm-table-cell");
-			td3.attr("style","width:13%");
-			
-			let td4= $("<td>");
-			td4.append(resp[i].write_date);
-			td4.attr("class","d-none d-md-table-cell");
-			td4.attr("style","width:20%");
-			
-			let td5= $("<td>");
-			td5.append(resp[i].view_count);
-			td5.attr("class","d-none d-md-table-cell");
-			td5.attr("style","width:10%");
-			
-			tr.append(td1);
-			tr.append(td2);
-			tr.append(td3);
-			tr.append(td4);
-			tr.append(td5);
-			
-			$("#table").append(tr);
-		}
-		
-	})
-	
-	
-	
-	
 	$("#writeBtn").on("click",function(){
-		location.href ="write.bor"
+		location.href ="${pageContext.request.contextPath}/write.bor"
 	})
 	
 	
@@ -223,27 +171,36 @@ $(function(){
 			</tr>
 			</thead>
 			<tbody>
+			<!-- 게시글 리스트 뽑아오기  -->
+			<c:choose>
+				<c:when test="${list != null}" >
+					<c:forEach var="list" items="${list}">
 				<tr>
-					<td class="d-sm-table-cell">1</td>
-					<td class="d-sm-table-cell">가입인사 드려요</td>
-					<td class="d-sm-table-cell">아이언맨</td>
-					<td class="d-none d-md-table-cell ">2021.06.23</td>
-					<td class="d-none d-md-table-cell ">5</td>
-				</tr>	
-				<tr>
-					<td class="d-sm-table-cell">2</td>
-					<td class="d-sm-table-cell">가입인사 드려요</td>
-					<td class="d-sm-table-cell">아이언맨</td>
-					<td class="d-none d-md-table-cell ">2021.06.23</td>
-					<td class="d-none d-md-table-cell ">5</td>
-				</tr>	
-				<tr>
-					<td class="d-sm-table-cell">3</td>
-					<td class="d-sm-table-cell">가입인사 드려요</td>
-					<td class="d-sm-table-cell">아이언맨</td>
-					<td class="d-none d-md-table-cell ">2021.06.23</td>
-					<td class="d-none d-md-table-cell ">5</td>
-				</tr>	
+					<td class="d-sm-table-cell" style="width:7%">${list.board_seq}
+					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?board_seq=${list.board_seq}">${list.title}</a>
+					<td class="d-sm-table-cell" style="width:13%">${list.id}</td>
+					<td class="d-none d-md-table-cell" style="width:20%">${list.write_date}</td>
+					<td class="d-none d-md-table-cell" style="width:10%">${list.view_count}</td>
+				</tr>
+					</c:forEach>
+				</c:when>
+		
+		
+				<c:otherwise>
+					<c:forEach var="searchList" items="${searchList}">
+					<tr>
+					<td class="d-sm-table-cell" style="width:7%">${searchlist.board_seq}
+					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?seq=${searchlist.board_seq}">${searchlist.title}</a>
+					<td class="d-sm-table-cell" style="width:13%">${searchlist.id}</td>
+					<td class="d-none d-md-table-cell" style="width:20%">${searchlist.write_date}</td>
+					<td class="d-none d-md-table-cell" style="width:10%">${searchlist.view_count}</td>
+					</tr>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
+
+
+			
 			</tbody>
 			</table>
 		</div>
@@ -271,17 +228,7 @@ $(function(){
 		</div>
 		
 
-		<div class="controls col-12">
-			<select name="category" class="form-control form-control-inline">
-				<option value="title">제목</option>
-				<option value="writer">작성자</option>
-				<option value="contents">내용</option>
-			</select>
-			<input type="text" class="form-control searchWord" placeholder="검색어를 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2">
-			<button class="btn btn-info" type="button" id="button-addon2">검색</button>
-		</div>
-	
-		<hr>
+		
 		
 		
 		<div class="controls col-12 search">
@@ -297,7 +244,7 @@ $(function(){
 			  <input type="text" class="form-control searchWord" style="width:100px; display: inline-block;" placeholder="검색어를 입력하세요">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-info" type="submit">
-				  <i class="glyphicon glyphicon-search"></i>
+				  <i class="glyphicon glyphicon-search"></i> 검색
 				</button>
 			  </div>
 			</div>

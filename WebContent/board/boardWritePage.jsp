@@ -62,6 +62,11 @@ $(function(){
 	})
 	
 	
+	$("#saveBtn").on("click",function(){
+		$("#summernotecontent").val($(".note-editable").text());
+		$("#frm").submit();
+	})
+	
 })
 
 
@@ -77,15 +82,16 @@ $(document).ready(function(){
           height: 400,
           minHeight: 300,             // set minimum height of editor
           maxHeight: 300,             // set maximum height of editor
+          lang: 'ko-KR'
         });
 })
 
-$(function() {
-  $('#summernote').summernote({
-    height: 300,
-    lang: 'ko-KR' // 언어 세팅
-  });
-});
+// $(function() {
+//   $('#summernote').summernote({
+//     height: 300,
+//     lang: 'ko-KR' // 언어 세팅
+//   });
+// });
 
 
 
@@ -93,8 +99,8 @@ $(function() {
 var markupStr = $('#summernote').summernote('code');
 
 // set
-var markupStr = 'hello world';
-$('#summernote').summernote('code', markupStr);
+// var markupStr = 'hello world';
+// $('#summernote').summernote('code', markupStr);
 
 // 페이지를 렌더링 할 때 textarea 태그에 값을 넣어서 바로 불러올 수도 있는 것 같다.
 // PHP코드라면...
@@ -117,18 +123,18 @@ $('#summernote').summernote('code', markupStr);
 
 	
     <div class="row">
-    <form id="frm" action="save.bor" type="post" enctype="multipart/form-data">
+    <form id="frm" action="${pageContext.request.contextPath}/save.bor" type="post" >
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
-          <input type="text" class="form-control" id="bbs_title" name="bbs_title" placeholder="Title">
+          <input type="text" class="form-control" id="bbs_title" name="title" placeholder="Title">
         </div>
       </div>
  
       <div class="form-group">
         <label for="inputPassword3" class="col-sm-2 control-label">contents</label>
         <div class="col-sm-10 writeDiv">
-          <div id="summernote"></div>
+          <div id="summernote" name="content"></div>
         </div>
       </div>
        
@@ -149,7 +155,7 @@ $('#summernote').summernote('code', markupStr);
 
       </div>
       
-    </form>
+    
     
   
   </div>
@@ -159,15 +165,16 @@ $('#summernote').summernote('code', markupStr);
       <hr>
       <div class="col-12">
         <button type="button" id="backBtn" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
-        <div class="pull-right"><a href="javascript:frm.submit();" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
+        <input type="hidden" name="content" id="summernotecontent">
+        <div class="pull-right"><a id="saveBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
       </div> 
     </div>
 
     </div>
 
-
+</form>
 <div>
-<input type="hidden" >
+
 
 </div>
 

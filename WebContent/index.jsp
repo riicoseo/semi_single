@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+$(function(){
+	$("#btn").on("click",function(){
+		location.href="${pageContext.request.contextPath}/list.bor?cpage=1";
+	})
+})
+</script>
+</head>
+<body>
+<input type=button value="게시판" id="btn">
+</body>
+</html>
