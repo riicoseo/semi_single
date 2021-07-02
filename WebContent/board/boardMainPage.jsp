@@ -100,15 +100,15 @@
 } */
 
 /* 1번 스타일 검색바 */
-.form-control-inline {
-    min-width: 0;
-    width: 80px;
-    display: inline; 
-}
-.searchWord{
-	width: 350px;
-	display: inline;
-}
+/* .form-control-inline { */
+/*     min-width: 0; */
+/*     width: 80px; */
+/*     display: inline;  */
+/* } */
+/* .searchWord{ */
+/* 	width: 350px; */
+/* 	display: inline; */
+/* } */
 
 
 /* 2번 스타일 검색바    선택*/   
@@ -126,9 +126,11 @@
 	width:320px
 }
 
-/* #writeBtnDiv{ */
+
+#writeBtnDiv{ 
 padding:0;
 }
+
 #writeBtn{
 float:right;
 }
@@ -187,7 +189,7 @@ $(function(){
 		
 		
 				<c:otherwise>
-					<c:forEach var="searchList" items="${searchList}">
+					<c:forEach var="searchlist" items="${searchList}">
 					<tr>
 					<td class="d-sm-table-cell" style="width:7%">${searchlist.board_seq}
 					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?seq=${searchlist.board_seq}">${searchlist.title}</a>
@@ -208,7 +210,7 @@ $(function(){
 		
 		<div class="row">
 		<div class="col-12" id="writeBtnDiv">
-			<button class="btn btn-info" type="button" id="writeBtn">글쓰기</button>
+			<button class="btn btn-info" type="button" id="writeBtn" style="float:right">글쓰기</button>
 		</div>
 		</div>
 
@@ -216,14 +218,27 @@ $(function(){
 		<div class="row" style="text-align: center;">
 		<div class="col-12" >
 			<ul class="pagination">
-				<li class="page-item"><a href="#" class="page-link">Previous</a></li>
-				<!-- <li class="page-item disabled"><a href="#">Previous</a></li> -->
-				<li class="page-item"><a href="#" class="page-link">1</a></li>
-				<li class="page-item"><a href="#" class="page-link">2</a></li>
-				<li class="page-item active"><a href="#" class="page-link">3</a></li>
-				<li class="page-item"><a href="#" class="page-link">4</a></li>
-				<li class="page-item"><a href="#" class="page-link">5</a></li>
-				<li class="page-item"><a href="#" class="page-link">Next</a></li>
+				<c:forEach var="i" items="${navi}" varStatus="s">
+					<c:choose>
+						<c:when test="${i == '>'}">
+							<li class="page-item"><a href="${pageContext.request.contextPath}/list.bor?cpage=${navi[s.index-1]+1}&category=${category}&searchWord=${searchWord}">Next</a>
+						</c:when>
+						<c:when test="${i == '<'}">
+							<li class="page-item"><a href="${pageContext.request.contextPath}/list.bor?cpage=${navi[s.index+1]-1}&category=${category}&searchWord=${searchWord}">Previous</a>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item"><a href="${pageContext.request.contextPath}/list.bor?cpage=${i}&category=${category}&searchWord=${searchWord}">${i}</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			
+<!-- 				<li class="page-item"><a href="#" class="page-link">Previous</a></li> -->
+<!-- 				<li class="page-item"><a href="#" class="page-link">1</a></li> -->
+<!-- 				<li class="page-item"><a href="#" class="page-link">2</a></li> -->
+<!-- 				<li class="page-item active"><a href="#" class="page-link">3</a></li> -->
+<!-- 				<li class="page-item"><a href="#" class="page-link">4</a></li> -->
+<!-- 				<li class="page-item"><a href="#" class="page-link">5</a></li> -->
+<!-- 				<li class="page-item"><a href="#" class="page-link">Next</a></li> -->
 			</ul>
 		</div>
 		
@@ -232,16 +247,16 @@ $(function(){
 		
 		
 		<div class="controls col-12 search">
-			<form style="display: inline-block;">
+		<form action="${pageContext.request.contextPath}/list.bor?cpage=1" method="post" style="display: inline-block;">
 			<div class="float1">
 			<select name="category" class="form-control form-control-inline">
 				<option value="title">제목</option>
-				<option value="writer">작성자</option>
-				<option value="contents">내용</option>
+				<option value="id">작성자</option>
+				<option value="content">내용</option>
 			</select>
 			</div>
 			<div class="input-group controls float2">
-			  <input type="text" class="form-control searchWord" style="width:100px; display: inline-block;" placeholder="검색어를 입력하세요">
+			  <input type="text" class="form-control searchWord" style="width:100px; display: inline-block;" placeholder="검색어를 입력하세요" name="searchWord">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-info" type="submit">
 				  <i class="glyphicon glyphicon-search"></i> 검색
@@ -252,7 +267,7 @@ $(function(){
 		</div>
 		
 		</div>
-
+		
 
 		</div>
 

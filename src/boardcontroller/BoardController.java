@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import boardconfig.BoardConfig;
 import boarddao.BoardDAO;
 import boarddto.BoardDTO;
 
@@ -41,10 +42,9 @@ public class BoardController extends HttpServlet {
 			String searchWord = request.getParameter("searchWord");
 			
 			int cpage =Integer.parseInt(request.getParameter("cpage"));
-			int record_count_per_page = 10;
 			
-			int endNum =cpage*record_count_per_page;
-			int startNum =endNum -(record_count_per_page-1);
+			int endNum =cpage*BoardConfig.RECORD_COUNT_PER_PAGE;
+			int startNum =endNum -(BoardConfig.RECORD_COUNT_PER_PAGE-1);
 			
 			
 			List<BoardDTO> list ;
@@ -56,7 +56,10 @@ public class BoardController extends HttpServlet {
 					
 			List<String> pageNavi = dao.getPageNavi(cpage,category,searchWord);
 			
-			
+			if(searchWord!=null&&!searchWord.contentEquals("")) {
+				List<BoardDTO> searchlist= dao.search(category, searchWord);
+			}
+			request.setAttribute("searchList", list);
 			request.setAttribute("list", list);
 			request.setAttribute("navi", pageNavi);
 			request.setAttribute("category", category);
@@ -81,6 +84,17 @@ public class BoardController extends HttpServlet {
 			// MemberDTO dto = request.getSession().getAttribute("login");
 			//String id =dto.getId();
 			String id="practice1";
+			
+			String filePath = request.getServletContext().getRealPath("files");
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			String title = request.getParameter("title");
 			String content = request.getParameter("content");

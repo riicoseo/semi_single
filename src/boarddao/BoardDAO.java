@@ -2,10 +2,8 @@ package boarddao;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +11,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import boardconfig.BoardConfig;
 import boarddto.BoardDTO;
 
 public class BoardDAO {
@@ -32,6 +31,9 @@ public class BoardDAO {
 		return ds.getConnection();
 	}
 	
+	
+	
+//========= 게시판 기본 메서드 ======================================================================	
 	public List<BoardDTO> selectAll() throws Exception {
 		String sql ="select * from board";
 		List<BoardDTO> list = new ArrayList<>();
@@ -95,13 +97,39 @@ public class BoardDAO {
 		}
 	}
 	
+	public List<BoardDTO> search(String category, String searchWord) throws Exception {
+		String sql ="select * from board where "+category +" like ?";
+		List<BoardDTO> list = new ArrayList<BoardDTO>();		
+		try(Connection con = this.getConnection(); 
+					PreparedStatement pstat = con.prepareStatement(sql);){
+					pstat.setString(1, "%"+searchWord+"%");
+					try(ResultSet rs = pstat.executeQuery();){
+						while(rs.next()) {
+						  int board_seq = rs.getInt("board_seq");
+						  String id = rs.getNString("id");
+						  String title = rs.getString("title");
+						  String content = rs.getString("content");
+						  Date write_date = rs.getDate("write_date");
+					      int view_count = rs.getInt("view_count");
+							list.add(new BoardDTO(board_seq,id, title, content,write_date, view_count));
+						}
+					}return list;
+				}
+	}
 	
+	
+	
+	
+	
+	
+	
+//========= 게시판  페이징 처리 ======================================================================
 	
 	private int getRecordCount() throws Exception {
 		String sql = "select count(*) from board";
 		try (Connection con = this.getConnection();
-				PreparedStatement pstat = con.prepareStatement(sql);
-				ResultSet rs = pstat.executeQuery();) {
+			 PreparedStatement pstat = con.prepareStatement(sql);
+			 ResultSet rs = pstat.executeQuery();) {
 			rs.next();
 			return rs.getInt(1);
 
@@ -121,20 +149,17 @@ public class BoardDAO {
 		
 		
 	public List<String> getPageNavi(int currentPage, String category, String searchWord) throws Exception {
-		// 페이지 네이게이터
-		// int recordTotalCount = 148; // 전체 레코드의 개수 → 원래 DB에서 뽑아와야 하지만, 현재는 그냥 임시로 숫자
-		// 기입!
 		
 		int recordTotalCount ;
 		
-		if(searchWord==null) {
+		if(searchWord==null||searchWord.contentEquals("")) {
 			recordTotalCount=this.getRecordCount();
 		}else {
 			recordTotalCount=this.getRecordCount(category,searchWord);
 		}
 		
-		int recordCountPerPage = 10; // 한 페이지 당 보여줄 게시글의 개수
-		int naviCountPerPage = 10; // 내 위치 페이지를 기준으로 시작부터 끝까지의 페이지가 총 몇개인지
+		int recordCountPerPage = BoardConfig.RECORD_COUNT_PER_PAGE; // 한 페이지 당 보여줄 게시글의 개수
+		int naviCountPerPage = BoardConfig.NAVI_COUNT_PER_PAGE; // 내 위치 페이지를 기준으로 시작부터 끝까지의 페이지가 총 몇개인지
 
 		int pageTotalCount = 0;
 		// 전체 레코드를 페이지당 보여줄 게시글 수 로 나눠서, 나머지가 0보다 크다면 1페이지를 더 추가해줘라!
@@ -146,10 +171,7 @@ public class BoardDAO {
 			pageTotalCount = recordTotalCount / recordCountPerPage;
 		}
 
-		// 현재 내가 위치하는 페이지 번호 → 내가 현재 4페이지에 있다고 가정해보자!
-		// int currentPage = 13;
-		// getPageNavi 메서드가 매개변수로 currentPage를 받아오니까 임의 숫자로 지정했던 currentPage는 삭제
-
+		
 		if (currentPage > pageTotalCount) {
 			currentPage = pageTotalCount;
 		} else if (currentPage < 1) {
@@ -217,7 +239,7 @@ public class BoardDAO {
 	}
 	// 검색 후, 페이지 리스트를 가져오는 메서드를 오버로딩해서 한번 더 만들기!
 		public List<BoardDTO> getPageList(int startNum, int endNum, String category, String keyword) throws Exception {
-			String sql = "select * from " + "(select " + "row_number() over(order by seq desc) rnum," + "board_seq,"+"id," + "title,"
+			String sql = "select * from " + "(select " + "row_number() over(order by board_seq desc) rnum," + "board_seq,"+"id," + "title,"
 					+ "content," + "write_date," + "view_count " + "from board where "+category+" like ?) " + "where " + "rnum between ? and ?";
 			try (Connection con = this.getConnection(); 
 				PreparedStatement pstat = con.prepareStatement(sql);) {
@@ -243,5 +265,7 @@ public class BoardDAO {
 				}
 			}
 		}
+		
+//========= 게시판  페이징 처리 끝! ======================================================================
 	
 }

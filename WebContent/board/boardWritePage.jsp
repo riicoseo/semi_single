@@ -123,7 +123,7 @@ var markupStr = $('#summernote').summernote('code');
 
 	
     <div class="row">
-    <form id="frm" action="${pageContext.request.contextPath}/save.bor" type="post" >
+    <form id="frm" action="${pageContext.request.contextPath}/save.bor" type="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
@@ -147,13 +147,13 @@ var markupStr = $('#summernote').summernote('code');
         </div>
         
 
-        <div class="col-sm-10">
-          <div id="fine-uploader"></div>
-          <!-- Fine Uploader -->
+<!--         <div class="col-sm-10"> -->
+<!--           <div id="fine-uploader"></div> -->
+<!--           Fine Uploader -->
 <%--           <jsp:include page="/resources/fileUpload/all.fine-uploader/lee/division_script.jsp" flush="true" /> --%>
-        </div>
+<!--         </div> -->
 
-      </div>
+<!--       </div> -->
       
     
     
@@ -177,6 +177,7 @@ var markupStr = $('#summernote').summernote('code');
 
 
 </div>
-
+<div class="col-12">
+</div>
 </body>
 </html>
