@@ -30,8 +30,6 @@ public class BoardController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String uri = request.getRequestURI();
 		String ctxPath = request.getContextPath();
-		System.out.println("URI 는 "+uri);
-		System.out.println("CTXPATH 는 "+ctxPath);
 		
 		String cmd = uri.substring(ctxPath.length());
 		
@@ -113,7 +111,7 @@ public class BoardController extends HttpServlet {
 			String id="practice1";
 			
 			int result = dao.insert(new BoardDTO(board_seq,id,title,content,null,0));
-			System.out.println("게시판 게시글내용 저장 결과는 ? " + result);
+
 			
 			//파일 첨부 저장
 			Set<String> fileNames = multi.getFileNameSet();

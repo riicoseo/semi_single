@@ -14,6 +14,7 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- include summernote css/js -->
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
@@ -51,6 +52,19 @@ label{
   margin-top:15px;
 }
 
+input[type=file]{
+width:450px;
+height:35px;
+display:inline;
+}
+/* button[type=button]{ */
+/* font-size:12px; */
+/* height:25px; */
+/* width:40px; */
+/* padding:3px; */
+/* margin-bottom:10px; */
+/* } */
+
 </style>
 
 
@@ -67,6 +81,27 @@ $(function(){
 		$("#frm").submit();
 	})
 	
+	$("#btn1").on("click",function(){
+		$("#file1").val("");
+	})
+	$("#btn2").on("click",function(){
+		$("#file2").val("");
+	})
+	$("#btn3").on("click",function(){
+		$("#file3").val("");
+	})	
+	
+	
+	
+	
+	$('#summernote').summernote({
+        placeholder: 'Write contents',
+        height: 400,
+        minHeight: 300,             // set minimum height of editor
+        maxHeight: 300,             // set maximum height of editor
+        lang: 'ko-KR'
+      });
+	
 })
 
 
@@ -75,16 +110,10 @@ $(function(){
 
 
 
-$(document).ready(function(){
+// $(document).ready(function(){
    
-   $('#summernote').summernote({
-          placeholder: 'Write contents',
-          height: 400,
-          minHeight: 300,             // set minimum height of editor
-          maxHeight: 300,             // set maximum height of editor
-          lang: 'ko-KR'
-        });
-})
+   
+// })
 
 // $(function() {
 //   $('#summernote').summernote({
@@ -96,7 +125,7 @@ $(document).ready(function(){
 
 
 // get
-var markupStr = $('#summernote').summernote('code');
+//var markupStr = $('#summernote').summernote('code');
 
 // set
 // var markupStr = 'hello world';
@@ -141,9 +170,29 @@ var markupStr = $('#summernote').summernote('code');
        <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">첨부파일</label>
         <div class="col-sm-10 writeDiv">
-          <input type="file" class="form-control"  name="file1">
-          <input type="file" class="form-control"  name="file2">
-          <input type="file" class="form-control"  name="file3">
+<!--           <input type="file" class="form-control" id="file1"  name="file1"><button id="btn1" type="button" class="btn btn-danger btn-sm">삭제</button> -->
+<!--           <input type="file" class="form-control" id="file2"  name="file2"><button id="btn2" type="button" class="btn btn-danger">삭제</button> -->
+<!--           <input type="file" class="form-control" id="file3"  name="file3"><button id="btn3" type="button" class="btn btn-danger">삭제</button> -->
+       
+        <div class="input-group" >
+			  <input type="file" class="form-control" id="file1"  name="file1" style="display:inline; width:450px">
+			  <div class="input-group-btn" style="display: inline;">
+				<button class="btn btn-danger" type="button" id="btn1">삭제</button>
+			  </div>
+		</div>
+		<div class="input-group" >
+			  <input type="file" class="form-control" id="file2"  name="file2" style="display:inline; width:450px" >
+			  <div class="input-group-btn" style="display: inline;">
+				<button class="btn btn-danger" type="button" id="btn2">삭제</button>
+			  </div>
+		</div>
+		<div class="input-group" >
+			  <input type="file" class="form-control" id="file3"  name="file3" style="display:inline; width:450px">
+			  <div class="input-group-btn" style="display: inline;">
+				<button class="btn btn-danger" type="button" id="btn3">삭제</button>
+			  </div>
+		</div>
+       
         </div>
         
 
