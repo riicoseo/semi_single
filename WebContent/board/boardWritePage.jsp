@@ -123,7 +123,7 @@ var markupStr = $('#summernote').summernote('code');
 
 	
     <div class="row">
-    <form id="frm" action="${pageContext.request.contextPath}/save.bor" type="post" enctype="multipart/form-data">
+    <form id="frm" action="${pageContext.request.contextPath}/save.bor" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">

@@ -86,11 +86,12 @@ public class BoardDAO {
 	
 	
 	public int insert(BoardDTO dto) throws Exception {
-		String sql = "insert into board values(board_seq.nextval,?,?,?,sysdate,0)";
+		String sql = "insert into board values(?,?,?,?,sysdate,0)";
 		try (Connection con = this.getConnection(); PreparedStatement pstat = con.prepareStatement(sql);) {
-			pstat.setString(1, dto.getId());
-			pstat.setString(2, dto.getTitle());
-			pstat.setString(3, dto.getContent());
+			pstat.setInt(1, dto.getBoard_seq());
+			pstat.setString(2, dto.getId());
+			pstat.setString(3, dto.getTitle());
+			pstat.setString(4, dto.getContent());
 			int result = pstat.executeUpdate();
 			con.commit();
 			return result;
@@ -268,4 +269,16 @@ public class BoardDAO {
 		
 //========= 게시판  페이징 처리 끝! ======================================================================
 	
+		
+		public int getSeq() throws Exception {
+			String sql ="select board_seq.nextval from dual";
+			try (Connection con = this.getConnection();
+					PreparedStatement pstat = con.prepareStatement(sql);
+					ResultSet rs = pstat.executeQuery();) {
+				rs.next();
+				return rs.getInt(1);
+			}
+		}
+		
+		
 }

@@ -16,8 +16,11 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import boardconfig.BoardConfig;
+import boardconfig.FileConfig;
 import boarddao.BoardDAO;
+import boarddao.FileDAO;
 import boarddto.BoardDTO;
+import boarddto.FileDTO;
 
 @WebServlet("*.bor")
 public class BoardController extends HttpServlet {
@@ -27,12 +30,15 @@ public class BoardController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String uri = request.getRequestURI();
 		String ctxPath = request.getContextPath();
+		System.out.println("URI 는 "+uri);
+		System.out.println("CTXPATH 는 "+ctxPath);
 		
 		String cmd = uri.substring(ctxPath.length());
 		
 		System.out.println("요청온 곳은  ==> "+cmd);
 		
 		BoardDAO dao = BoardDAO.getInstance();
+		FileDAO fdao= FileDAO.getInstance();
 		Gson g = new Gson();
 		
 		try {
@@ -83,27 +89,46 @@ public class BoardController extends HttpServlet {
 		}else if(cmd.contentEquals("/save.bor")) {
 			// MemberDTO dto = request.getSession().getAttribute("login");
 			//String id =dto.getId();
-			String id="practice1";
+			
 			
 			String filePath = request.getServletContext().getRealPath("files");
+			File fileFolder = new File(filePath);
+			
+			if(!fileFolder.exists()) { fileFolder.mkdir();}
+			
+			MultipartRequest multi = new MultipartRequest(request,filePath, FileConfig.uploadMaxSize,"utf8",new DefaultFileRenamePolicy());
 			
 			
 			
 			
 			
-			
-			
-			
-			
-			
-			String title = request.getParameter("title");
-			String content = request.getParameter("content");
+			// 게시판 글쓰기 저장
+			String title = multi.getParameter("title");
+			String content = multi.getParameter("content");
 			
 			title = dao.XSSFilter(title);
 			content = dao.XSSFilter(content);
 			
-			int result = dao.insert(new BoardDTO(0,id,title,content,null,0));
+			int board_seq= dao.getSeq();
+			String id="practice1";
 			
+			int result = dao.insert(new BoardDTO(board_seq,id,title,content,null,0));
+			System.out.println("게시판 게시글내용 저장 결과는 ? " + result);
+			
+			//파일 첨부 저장
+			Set<String> fileNames = multi.getFileNameSet();
+			for(String fileName :fileNames) {
+				
+				String oriName = multi.getOriginalFileName(fileName);
+				String sysName = multi.getFilesystemName(fileName);
+				
+				if(oriName!=null) {
+					fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+				}
+			}
+			
+			response.sendRedirect("detail.bor?board_seq="+board_seq);
+			//response.sendRedirect(ctxPath+ "/list.board?cpage=1");
 		}
 		
 		
