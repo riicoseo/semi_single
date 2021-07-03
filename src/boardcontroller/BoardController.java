@@ -18,8 +18,10 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import boardconfig.BoardConfig;
 import boardconfig.FileConfig;
 import boarddao.BoardDAO;
+import boarddao.CommentsDAO;
 import boarddao.FileDAO;
 import boarddto.BoardDTO;
+import boarddto.CommentsDTO;
 import boarddto.FileDTO;
 
 @WebServlet("*.bor")
@@ -36,6 +38,7 @@ public class BoardController extends HttpServlet {
 		System.out.println("요청온 곳은  ==> "+cmd);
 		
 		BoardDAO dao = BoardDAO.getInstance();
+		CommentsDAO cdao = CommentsDAO.getInstance();
 		FileDAO fdao= FileDAO.getInstance();
 		Gson g = new Gson();
 		
@@ -77,11 +80,17 @@ public class BoardController extends HttpServlet {
 		
 		}else if(cmd.contentEquals("/detail.bor")) {
 			int board_seq = Integer.parseInt(request.getParameter("board_seq"));
-			BoardDTO dto = dao.detail(board_seq);
+			
+			dao.view_count(board_seq); // 조회수 올리는 코드
+			BoardDTO dto = dao.detail(board_seq);  //게시글의 디테일 내용 가져오기
+			List<CommentsDTO> cmtlist = cdao.getCommentsList(board_seq); // 댓글 목록을 가져오는 코드
+			List<FileDTO> flist = fdao.fileList(board_seq);  //게시글의 첨부파일 리스트 가져오기
 			
 			String login = "ee";
 			request.getSession().setAttribute("login", login);
-			request.setAttribute("list", dto);
+			request.setAttribute("list", dto);    //게시글의 디테일 내용 전달하기
+			request.setAttribute("cmt", cmtlist);  // 댓글 리스트 전달하기
+			request.setAttribute("flist", flist);  //게시글의 첨부파일 리스트 전달하기
 			request.getRequestDispatcher("board/boardDetailPage.jsp").forward(request, response);
 			
 		}else if(cmd.contentEquals("/save.bor")) {
@@ -90,11 +99,12 @@ public class BoardController extends HttpServlet {
 			
 			
 			String filePath = request.getServletContext().getRealPath("files");
+			
 			File fileFolder = new File(filePath);
 			
 			if(!fileFolder.exists()) { fileFolder.mkdir();}
 			
-			MultipartRequest multi = new MultipartRequest(request,filePath, FileConfig.uploadMaxSize,"utf8",new DefaultFileRenamePolicy());
+			MultipartRequest multi = new   MultipartRequest(request,filePath, FileConfig.uploadMaxSize,"utf8",new DefaultFileRenamePolicy());
 			
 			
 			
@@ -127,7 +137,13 @@ public class BoardController extends HttpServlet {
 			
 			response.sendRedirect("detail.bor?board_seq="+board_seq);
 			//response.sendRedirect(ctxPath+ "/list.board?cpage=1");
-		}
+			
+		}else if(cmd.contentEquals("/delete.bor")) {
+            int board_seq = Integer.parseInt(request.getParameter("board_seq"));
+            int result = dao.delete(board_seq);
+            
+            response.sendRedirect(ctxPath + "/list.bor?cpage=1");
+         }
 		
 		
 		

@@ -280,5 +280,30 @@ public class BoardDAO {
 			}
 		}
 		
-		
+		// 조회수 출력 ---------------------------------------------------------------
+		   public int view_count(int board_seq) throws Exception{
+		      String sql="update board set view_count = view_count+1 where board_seq=?";
+		      try(Connection con = this.getConnection(); 
+		            PreparedStatement pstat = con.prepareStatement(sql);){
+		         pstat.setInt(1,board_seq);
+
+		         int result = pstat.executeUpdate();
+		         con.commit();
+		         return result;
+		      }
+		   }
+		   // 게시글 삭제 -------------------------------------------------------------------
+		   public int delete(int board_seq) throws Exception{
+		      String sql = "delete from board where board_seq = ?";
+		      try(
+		            Connection con = this.getConnection();
+		            PreparedStatement pstat = con.prepareStatement(sql);
+		            ){
+		         pstat.setInt(1, board_seq);
+		   
+		         int result = pstat.executeUpdate();
+		         con.commit();
+		         return result;
+		      }
+		   }
 }

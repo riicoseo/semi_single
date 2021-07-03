@@ -65,20 +65,36 @@ display:inline;
 /* margin-bottom:10px; */
 /* } */
 
+#summernoteContent{
+}
+
 </style>
 
 
 <script>
 $(function(){
 	$("#backBtn").on("click",function(){
-		location.href =	"javascript:history.back()";
-		//location.href = "Ajax_BoardMainPage.jsp";
+		//location.href =	"javascript:history.back()";
+		location.href = "${pageContext.request.contextPath}/list.bor?cpage=1";
 	})
 	
 	
 	$("#saveBtn").on("click",function(){
-		$("#summernotecontent").val($(".note-editable").text());
-		$("#frm").submit();
+		$("#summernoteContent").val($(".note-editable").text());
+		
+		let title = $("#bbs_title").val();
+		let content = $("#summernoteContent").val();
+		
+		let regex = /\S/;
+		let result1 = regex.test(title);
+		let result2 = regex.test(content);
+		if(!result1){
+			alert("제목을 반드시 입력해주세요!");
+		}else if(!result2){
+			alert("내용을 입력해주세요!");
+		}else{
+			$("#frm").submit();
+		}
 	})
 	
 	$("#btn1").on("click",function(){
@@ -214,7 +230,7 @@ $(function(){
       <hr>
       <div class="col-12">
         <button type="button" id="backBtn" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
-        <input type="hidden" name="content" id="summernotecontent">
+        <textarea cols="3" name="content" id="summernoteContent" style="display:none"></textarea>
         <div class="pull-right"><a id="saveBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
       </div> 
     </div>

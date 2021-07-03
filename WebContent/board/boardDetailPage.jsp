@@ -351,6 +351,7 @@ table a, #comments a{background-color:inherit;}
     margin-top: 10px;
     padding-top: 30px;
 }
+
 </style>
 <script>
 $(document).ready(function(){
@@ -381,57 +382,75 @@ $(document).ready(function(){
                <div class="row">
                   <div class="col-sm-6">
                      <h2>
-                        <b>방구석 오락실 대결 하실 분~??</b>
+                        ${list.title}
                      </h2>
                   </div>
                </div>
             </div>
                <div class="title">
-            <ul>
-               <li class="view_cnt">${list.id}</li>
-               <li class="write_date">${list.write_date}</li>
-               <li class="view_cnt">25</li>
-            </ul>
-         </div>
-         <div class="files">
-         <h4>Files</h4>
-         
-         </div>
+                  <ul>
+                     <li class="view_cnt">${list.id}</li>
+                     <li class="write_date">${list.write_date}</li>
+                     <li class="view_cnt">${list.view_count}</li>
+                  </ul>
+               </div>
+                <div class="files">
+                  <h4>Files</h4>
+                 <c:forEach var="f" items="${flist}">
+                    <a href="${pageContext.request.contextPath}/download.file?file_seq=${f.file_seq}&oriName=${f.oriName}&sysName=${f.sysName}">${f.oriName}</a>
+                    <br>
+                 </c:forEach>
+               </div>
          <h4>Contents</h4>
          <div class="contents">
          ${list.content}
          </div>
+         
+         
                   <div id="comments">
-                     <h4>Comments</h4>
-                     <ul>
-                        <li>
-                           <article>
-                              <header>
-                                 <address>
-                                    By <a href="#"></a>
-                                    <a></a>
-<!--                                     <time datetime="2045-04-06T08:15+00:00">Friday, 6<sup>th</sup> April 2045 @08:15:00</time> -->
-                                 </address>
-                              </header>
-                              <div class="comcont">
-                              
-                                 <p>지렁이게임 자신 있습니다~!</p>
-                              </div>
-                              <div class="comcont_btn">
-                                 <a href="#editEmployeeModal" class="edit" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                 <a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-                                    <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                              </div>
-                           </article>
-                        </li>
-                     </ul>
+                  <h4>Comments</h4>
+                  <c:forEach var="i" items="${cmt}">
+                  <div>
+                  <ul>
+                  <li>
+                  <article>
+                  <header>
+                  <address>
+                  By <a href="">${i.id}</a>                                    
+                  <time deatetme=""></time>
+                  ${i.cmt_date}               
+                  <!-- <time datetime="2045-04-06T08:15+00:00">Friday, 6<sup>th</sup> April 2045 @08:15:00</time> -->
+                  </address>
+                  </header>
+                  <div class="comcont">
+                  ${i.cmt_content}
+                  </div>
+                  <div class="comcont_btn">
+                  <c:choose>
+                  <c:when test="${i.id eq login}">
+                  <a href="" class="edit" data-toggle="modal">
+                  <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                  <a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
+                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                  </c:when>
+                  </c:choose>
+                  </div>
+                  </article>
+                  </li>
+                  </ul>
+                  </div>
+                  </c:forEach>
+                  
+                  
+                  
+                  
                      <h4>Write A Comment</h4>
-                     <form action="#" method="post">
+                     <form action="${pageContext.request.contextPath}/write.cmt" method="post">
+                        <input type="hidden" value="${list.board_seq}" name="board_seq">
                         <div class="block clear">
                            <label for="comment">Your Comment</label>
                            <br>
-                           <textarea name="comment" id="comment" cols="25" rows="3"></textarea>
+                           <textarea name="cmt_content" id="comment" cols="25" rows="3" placeholder="댓글 내용을 작성하세요."></textarea>
                            <div>
                            <input type="submit" name="submit" id="sign" value="등록">
                         </div>
@@ -441,10 +460,8 @@ $(document).ready(function(){
             <div class="btn_wrap" align="left">
             <c:choose>
                <c:when test="${login eq list.id}">
-                  <a href="${pageContext.request.contextPath}/boardModiForm.board?id=${cnt.seq}"
-                     class="btn btn-primary">수정하기</a>
-                  <a href="${pageContext.request.contextPath}/boardDelete.board?id=${cnt.seq}"
-                     class="btn btn-danger">삭제하기</a>
+                  <a href="${pageContext.request.contextPath}/boardModiForm.board?id=${list.board_seq}" class="btn btn-primary">수정하기</a>
+                  <a href="${pageContext.request.contextPath}/delete.bor?board_seq=${list.board_seq}" class="btn btn-danger">삭제하기</a>
                </c:when>
             </c:choose>
             </div>
@@ -471,9 +488,8 @@ $(document).ready(function(){
                   </p>
                </div>
                <div class="modal-footer">
-                  <input type="button" class="btn btn-default" data-dismiss="modal"
-                     value="Cancel"> <input type="submit"
-                     class="btn btn-danger" value="Delete">
+                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                  <a href="${pageContext.request.contextPath}/delete.cmt?board_seq=${list.board_seq}"><input type="button" class="btn btn-danger" value="Delete"></a>
                </div>
             </form>
          </div>
