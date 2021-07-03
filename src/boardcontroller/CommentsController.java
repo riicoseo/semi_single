@@ -32,7 +32,7 @@ public class CommentsController extends HttpServlet {
       try {
          if(cmd.contentEquals("/write.cmt")) {
 //            MemberDTO str = ((MemberDTO)request.getSession().getAttribute("login"));
-            String id = "test";
+            String id = "ee";
             String cmt_content = request.getParameter("cmt_content");
             cmt_content = dao.XSSFilter(cmt_content);
             int board_seq = Integer.parseInt(request.getParameter("board_seq"));

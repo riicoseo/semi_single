@@ -26,12 +26,12 @@
 
 
 <style>
-/* body {
+body {
 	color: #566787;
 	background: #f5f5f5;
 	font-family: 'Varela Round', sans-serif;
 	font-size: 13px;
-} */
+} 
 /* .table-wrapper {
     margin: 30px 0;
 }*/
@@ -173,6 +173,9 @@ $(function(){
 			</tr>
 			</thead>
 			<tbody>
+			
+<!-- 			<i class="fa fa-bullhorn" aria-hidden="true" style="font-size:25px"></i> -->
+			
 			<!-- 게시글 리스트 뽑아오기  -->
 			<c:choose>
 				<c:when test="${list != null}" >

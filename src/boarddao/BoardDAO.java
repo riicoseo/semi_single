@@ -162,7 +162,7 @@ public class BoardDAO {
 		int recordCountPerPage = BoardConfig.RECORD_COUNT_PER_PAGE; // 한 페이지 당 보여줄 게시글의 개수
 		int naviCountPerPage = BoardConfig.NAVI_COUNT_PER_PAGE; // 내 위치 페이지를 기준으로 시작부터 끝까지의 페이지가 총 몇개인지
 
-		int pageTotalCount = 0;
+		int pageTotalCount = 0;   
 		// 전체 레코드를 페이지당 보여줄 게시글 수 로 나눠서, 나머지가 0보다 크다면 1페이지를 더 추가해줘라!
 		if (recordTotalCount % recordCountPerPage > 0) {
 			pageTotalCount = (recordTotalCount / recordCountPerPage) + 1;
