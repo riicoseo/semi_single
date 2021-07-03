@@ -24,8 +24,7 @@ public class CommentsController extends HttpServlet {
       String requestURI = request.getRequestURI();
       String ctxPath = request.getContextPath();
       String cmd = requestURI.substring(ctxPath.length());
-      System.out.println("요청된 url :" + cmd);
-      
+     
       CommentsDAO cdao = CommentsDAO.getInstance();
       BoardDAO dao = BoardDAO.getInstance();
       
