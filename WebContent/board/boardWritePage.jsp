@@ -191,27 +191,28 @@ $(function(){
 <!--           <input type="file" class="form-control" id="file3"  name="file3"><button id="btn3" type="button" class="btn btn-danger">삭제</button> -->
        
         <div class="input-group" >
-			  <input type="file" class="form-control" id="file1"  name="file1" style="display:inline; width:450px">
+			  <input type="file" class="form-control" id="file1"  name="file1" style="display:inline; width:430px">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-danger" type="button" id="btn1">삭제</button>
 			  </div>
 		</div>
 		<div class="input-group" >
-			  <input type="file" class="form-control" id="file2"  name="file2" style="display:inline; width:450px" >
+			  <input type="file" class="form-control" id="file2"  name="file2" style="display:inline; width:430px" >
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-danger" type="button" id="btn2">삭제</button>
 			  </div>
 		</div>
 		<div class="input-group" >
-			  <input type="file" class="form-control" id="file3"  name="file3" style="display:inline; width:450px">
+			  <input type="file" class="form-control" id="file3"  name="file3" style="display:inline; width:430px">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-danger" type="button" id="btn3">삭제</button>
 			  </div>
 		</div>
        
         </div>
-        
-
+          
+  </div>
+</div>
 <!--         <div class="col-sm-10"> -->
 <!--           <div id="fine-uploader"></div> -->
 <!--           Fine Uploader -->
@@ -220,10 +221,31 @@ $(function(){
 
 <!--       </div> -->
       
-    
-    
+
   
-  </div>
+  
+  
+<!--   관리자 모드 일때만, 나타나는 공지 등록 여부 항목 -->
+<%-- <c:choose> --%>
+<%-- 	<c:when test="${login.id eq admin}"> --%>
+<!-- 		나중에 여기에 밑에 써놓은 '공지 등록 여부 row' 넣기!!!! -->
+<%-- 	</c:when> --%>
+<%-- 	<c:otherwise> --%>
+<!-- 		<input type="hidden" name="notice" value="N"> -->
+<%-- 	</c:otherwise> --%>
+<%-- </c:choose> --%>
+
+
+	<div class="row" style="margin-top:15px">
+		<label class="col-sm-2 control-label">공지 등록 여부</label>
+        <div class="col-sm-10 writeDiv" >
+          <input type="radio" name="notice" value="Y" style="margin-left:8px">등록  &nbsp; &nbsp; &nbsp;<input type="radio" name="notice" value="N" checked>등록안함
+        </div>
+	</div> 
+
+
+
+		
 
 
     <div class="row">
@@ -238,11 +260,8 @@ $(function(){
     </div>
 
 </form>
-<div>
+</div>
 
 
-</div>
-<div class="col-12">
-</div>
 </body>
 </html>

@@ -113,8 +113,8 @@ public class BoardController extends HttpServlet {
 			// 게시판 글쓰기 저장
 			String title = multi.getParameter("title");
 			String content = multi.getParameter("content");
-			//String notice = multi.getParameter("notice");
-			String notice = "N";
+			String notice = multi.getParameter("notice");
+			//String notice = "N";
 			title = dao.XSSFilter(title);
 			content = dao.XSSFilter(content);
 			
