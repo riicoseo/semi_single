@@ -26,6 +26,24 @@
 
 
 <style>
+
+/* tbody tr:nth-child(2n){ */
+/*    background-color: #FFFFFF; */
+/* } */
+/* tbody tr:nth-child(2n-1){ */
+/*    background-color: #E6E6FA; */
+/* } */
+.table-striped>tbody>tr:nth-child(odd) {
+    background-color: LemonChiffon;
+}
+.table-hover tbody tr:hover {
+/*     background-color: #E6E6FA; */
+    background-color: #D3D3D3;
+}
+
+
+
+
 body {
 	color: #566787;
 	background: #f5f5f5;
@@ -180,13 +198,31 @@ $(function(){
 			<c:choose>
 				<c:when test="${list != null}" >
 					<c:forEach var="list" items="${list}">
-				<tr>
-					<td class="d-sm-table-cell" style="width:7%">${list.board_seq}
-					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?board_seq=${list.board_seq}">${list.title}</a>
-					<td class="d-sm-table-cell" style="width:13%">${list.id}</td>
-					<td class="d-none d-md-table-cell" style="width:20%">${list.write_date}</td>
-					<td class="d-none d-md-table-cell" style="width:10%">${list.view_count}</td>
-				</tr>
+						
+						
+						<c:choose>
+						<c:when test="${list.notice eq 'Y'}">
+						<tr style="background-color:#FFFACD" onMouseOver="this.style='background-color:#D3D3D3'" onMouseOut="this.style='background-color:#FFFACD'">
+							<td class="d-sm-table-cell"><i class="fa fa-bullhorn" aria-hidden="true" style="font-size:12px"> 공지</i></td>
+							<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?board_seq=${list.board_seq}">${list.title}</a></td>
+							<td class="d-sm-table-cell" style="width:13%">${list.id}</td>
+							<td class="d-none d-md-table-cell" style="width:20%">${list.write_date}</td>
+							<td class="d-none d-md-table-cell" style="width:10%">${list.view_count}</td>
+						</tr>
+						</c:when>
+						
+						<c:otherwise>
+						<tr>
+							<td class="d-sm-table-cell" style="width:7%">${list.board_seq}</td>
+							<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?board_seq=${list.board_seq}">${list.title}</a></td>
+							<td class="d-sm-table-cell" style="width:13%">${list.id}</td>
+							<td class="d-none d-md-table-cell" style="width:20%">${list.write_date}</td>
+							<td class="d-none d-md-table-cell" style="width:10%">${list.view_count}</td>
+						</tr>
+						</c:otherwise>
+						</c:choose>
+							
+						
 					</c:forEach>
 				</c:when>
 		
@@ -194,8 +230,8 @@ $(function(){
 				<c:otherwise>
 					<c:forEach var="searchlist" items="${searchList}">
 					<tr>
-					<td class="d-sm-table-cell" style="width:7%">${searchlist.board_seq}
-					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?seq=${searchlist.board_seq}">${searchlist.title}</a>
+					<td class="d-sm-table-cell" style="width:7%">${searchlist.board_seq}</td>
+					<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?seq=${searchlist.board_seq}">${searchlist.title}</a></td>
 					<td class="d-sm-table-cell" style="width:13%">${searchlist.id}</td>
 					<td class="d-none d-md-table-cell" style="width:20%">${searchlist.write_date}</td>
 					<td class="d-none d-md-table-cell" style="width:10%">${searchlist.view_count}</td>

@@ -113,14 +113,15 @@ public class BoardController extends HttpServlet {
 			// 게시판 글쓰기 저장
 			String title = multi.getParameter("title");
 			String content = multi.getParameter("content");
-			
+			//String notice = multi.getParameter("notice");
+			String notice = "N";
 			title = dao.XSSFilter(title);
 			content = dao.XSSFilter(content);
 			
 			int board_seq= dao.getSeq();
 			String id="practice1";
 			
-			int result = dao.insert(new BoardDTO(board_seq,id,title,content,null,0));
+			int result = dao.insert(new BoardDTO(board_seq,id,title,content,null,0,notice));
 
 			
 			//파일 첨부 저장

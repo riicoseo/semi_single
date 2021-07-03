@@ -47,8 +47,8 @@ public class BoardDAO {
 				String content =rs.getNString("content");
 				Date write_date = rs.getDate("write_date");
 				int view_count = rs.getInt("view_count");
-				
-				list.add(new BoardDTO(board_seq,id,title,content,write_date,view_count));
+				String notice = rs.getNString("notice");
+				list.add(new BoardDTO(board_seq,id,title,content,write_date,view_count,notice));
 			}
 			return list;
 		}
@@ -69,6 +69,7 @@ public class BoardDAO {
 					dto.setContent(rs.getString("content"));
 					dto.setWrite_date(rs.getDate("write_date"));
 					dto.setView_count(rs.getInt("view_count"));
+					dto.setNotice(rs.getNString("notice"));
 				}
 				return dto;
 			}
@@ -86,12 +87,13 @@ public class BoardDAO {
 	
 	
 	public int insert(BoardDTO dto) throws Exception {
-		String sql = "insert into board values(?,?,?,?,sysdate,0)";
+		String sql = "insert into board values(?,?,?,?,sysdate,0,?)";
 		try (Connection con = this.getConnection(); PreparedStatement pstat = con.prepareStatement(sql);) {
 			pstat.setInt(1, dto.getBoard_seq());
 			pstat.setString(2, dto.getId());
 			pstat.setString(3, dto.getTitle());
 			pstat.setString(4, dto.getContent());
+			pstat.setString(5, dto.getNotice());
 			int result = pstat.executeUpdate();
 			con.commit();
 			return result;
@@ -112,7 +114,8 @@ public class BoardDAO {
 						  String content = rs.getString("content");
 						  Date write_date = rs.getDate("write_date");
 					      int view_count = rs.getInt("view_count");
-							list.add(new BoardDTO(board_seq,id, title, content,write_date, view_count));
+					      String notice = rs.getNString("notice");
+							list.add(new BoardDTO(board_seq,id, title, content,write_date, view_count,notice));
 						}
 					}return list;
 				}
@@ -216,8 +219,8 @@ public class BoardDAO {
 	}
 	
 	public List<BoardDTO> getPageList(int startNum, int endNum) throws Exception {
-		String sql = "select * from " + "(select " + "row_number() over(order by board_seq desc) rnum," + "board_seq,"+"id," + "title,"
-				+ "content," + "write_date," + "view_count " + "from board) " + "where " + "rnum between ? and ?";
+		String sql = "select * from " + "(select " + "row_number() over(order by notice desc, board_seq desc) rnum," + "board_seq,"+"id," + "title,"
+				+ "content," + "write_date," + "view_count, notice " + "from board) " + "where " + "rnum between ? and ?";
 		try (Connection con = this.getConnection(); PreparedStatement pstat = con.prepareStatement(sql);) {
 			pstat.setInt(1, startNum);
 			pstat.setInt(2, endNum);
@@ -232,7 +235,8 @@ public class BoardDAO {
 					String content = rs.getString("content");
 					Date write_date = rs.getDate("write_date");
 					int view_count = rs.getInt("view_count");
-					list.add(new BoardDTO(board_seq,id,title,content,write_date,view_count));
+					String notice = rs.getNString("notice");
+					list.add(new BoardDTO(board_seq,id,title,content,write_date,view_count,notice));
 				}
 				return list;
 			}
@@ -240,8 +244,8 @@ public class BoardDAO {
 	}
 	// 검색 후, 페이지 리스트를 가져오는 메서드를 오버로딩해서 한번 더 만들기!
 		public List<BoardDTO> getPageList(int startNum, int endNum, String category, String keyword) throws Exception {
-			String sql = "select * from " + "(select " + "row_number() over(order by board_seq desc) rnum," + "board_seq,"+"id," + "title,"
-					+ "content," + "write_date," + "view_count " + "from board where "+category+" like ?) " + "where " + "rnum between ? and ?";
+			String sql = "select * from " + "(select " + "row_number() over(order by notice desc, board_seq desc) rnum," + "board_seq,"+"id," + "title,"
+					+ "content," + "write_date," + "view_count, notice " + "from board where "+category+" like ?) " + "where " + "rnum between ? and ?";
 			try (Connection con = this.getConnection(); 
 				PreparedStatement pstat = con.prepareStatement(sql);) {
 				
@@ -260,7 +264,8 @@ public class BoardDAO {
 						String content = rs.getString("content");
 						Date write_date = rs.getDate("write_date");
 						int view_count = rs.getInt("view_count");
-						list.add(new BoardDTO(board_seq, id,title,content,write_date,view_count));
+						String notice = rs.getNString("notice");
+						list.add(new BoardDTO(board_seq, id,title,content,write_date,view_count,notice));
 					}
 					return list;
 				}

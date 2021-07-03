@@ -9,12 +9,14 @@ public class BoardDTO {
 	private String content;
 	private Date write_date;
 	private int view_count;
-
+	private String notice;
+	
 	public BoardDTO() {
 		super();
 	}
 
-	public BoardDTO(int board_seq, String id, String title, String content, Date write_date, int view_count) {
+	public BoardDTO(int board_seq, String id, String title, String content, Date write_date, int view_count,
+			String notice) {
 		super();
 		this.board_seq = board_seq;
 		this.id = id;
@@ -22,6 +24,7 @@ public class BoardDTO {
 		this.content = content;
 		this.write_date = write_date;
 		this.view_count = view_count;
+		this.notice = notice;
 	}
 
 	public int getBoard_seq() {
@@ -71,8 +74,14 @@ public class BoardDTO {
 	public void setView_count(int view_count) {
 		this.view_count = view_count;
 	}
-	
-	
+
+	public String getNotice() {
+		return notice;
+	}
+
+	public void setNotice(String notice) {
+		this.notice = notice;
+	}
 	
 	
 	
