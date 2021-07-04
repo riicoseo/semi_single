@@ -85,14 +85,26 @@ $(function(){
 		let title = $("#bbs_title").val();
 		let content = $("#summernoteContent").val();
 		
-		let regex = /\S/;
-		let result1 = regex.test(title);
-		let result2 = regex.test(content);
-		if(!result1){
+		let blankRegex = /\S/;
+		let titleLengthRegex = /^\S{0,66}$/;
+		let contentLengthRegex = /^\S{0,1333}$/;
+		
+		let bresult1 = blankRegex.test(title);
+		let bresult2 = blankRegex.test(content);
+		
+		let titleResult = titleLengthRegex.test(title);
+		let contentResult = contentLengthRegex.test(content);
+		
+		if(!bresult1){
 			alert("제목을 반드시 입력해주세요!");
-		}else if(!result2){
+		}else if(!bresult2){
 			alert("내용을 입력해주세요!");
-		}else{
+		}else if(!titleResult){
+			alert("제목은 66글자 이내로 작성해주세요.")
+		}else if(!contentResult){
+			alert("내용은 1,333글자 이내로 작성해주세요.")
+		}
+		else{
 			$("#frm").submit();
 		}
 	})
@@ -172,7 +184,7 @@ $(function(){
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
-          <input type="text" class="form-control" id="bbs_title" name="title" placeholder="Title">
+          <input type="text" class="form-control" id="bbs_title" name="title" placeholder="Title" >
         </div>
       </div>
  
