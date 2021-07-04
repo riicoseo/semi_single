@@ -460,7 +460,7 @@ $(document).ready(function(){
             <div class="btn_wrap" align="left">
             <c:choose>
                <c:when test="${login eq list.id}">
-                  <a href="${pageContext.request.contextPath}/boardModiForm.board?id=${list.board_seq}" class="btn btn-primary">수정하기</a>
+                  <a href="${pageContext.request.contextPath}/modifyPage.bor?board_seq=${list.board_seq}" class="btn btn-primary">수정하기</a>
                   <a href="${pageContext.request.contextPath}/delete.bor?board_seq=${list.board_seq}" class="btn btn-danger">삭제하기</a>
                </c:when>
             </c:choose>

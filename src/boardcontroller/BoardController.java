@@ -119,7 +119,7 @@ public class BoardController extends HttpServlet {
 			content = dao.XSSFilter(content);
 			
 			int board_seq= dao.getSeq();
-			String id="practice1";
+			String id="ee";
 			
 			int result = dao.insert(new BoardDTO(board_seq,id,title,content,null,0,notice));
 
@@ -137,14 +137,33 @@ public class BoardController extends HttpServlet {
 			}
 			
 			response.sendRedirect("detail.bor?board_seq="+board_seq);
-			//response.sendRedirect(ctxPath+ "/list.board?cpage=1");
+			
 			
 		}else if(cmd.contentEquals("/delete.bor")) {
             int board_seq = Integer.parseInt(request.getParameter("board_seq"));
             int result = dao.delete(board_seq);
             
             response.sendRedirect(ctxPath + "/list.bor?cpage=1");
-         }
+         
+            
+            
+            
+            
+            
+            
+            
+		}else if(cmd.contentEquals("/modifyPage.bor")) {
+			int board_seq = Integer.parseInt(request.getParameter("board_seq"));
+			BoardDTO dto = dao.detail(board_seq);
+			List<FileDTO> flist = fdao.fileList(board_seq);
+			
+			request.setAttribute("dto", dto);
+			request.setAttribute("flist", flist);
+			request.getRequestDispatcher("board/boardModifyPage.jsp").forward(request, response);
+			
+		}else if(cmd.contentEquals("/modify.bor")) {
+			
+		}
 		
 		
 		
