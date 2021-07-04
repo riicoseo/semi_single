@@ -203,7 +203,7 @@ $(function(){
 						<c:choose>
 						<c:when test="${list.notice eq 'Y'}">
 						<tr style="background-color:#FFFACD" onMouseOver="this.style='background-color:#D3D3D3'" onMouseOut="this.style='background-color:#FFFACD'">
-							<td class="d-sm-table-cell"><i class="fa fa-bullhorn" aria-hidden="true" style="font-size:12px"> 공지</i></td>
+							<td class="d-sm-table-cell"><i class="fa fa-bullhorn" aria-hidden="true" style="font-size:11px"> 공지</i></td>
 							<td class="d-sm-table-cell" style="width:50%"><a href="${pageContext.request.contextPath}/detail.bor?board_seq=${list.board_seq}">${list.title}</a></td>
 							<td class="d-sm-table-cell" style="width:13%">${list.id}</td>
 							<td class="d-none d-md-table-cell" style="width:20%">${list.write_date}</td>
