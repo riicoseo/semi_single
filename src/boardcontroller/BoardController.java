@@ -30,6 +30,7 @@ public class BoardController extends HttpServlet {
        
   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String uri = request.getRequestURI();
 		String ctxPath = request.getContextPath();
 		
@@ -59,14 +60,18 @@ public class BoardController extends HttpServlet {
 				list = dao.getPageList(startNum,endNum);
 			}else {
 				list = dao.getPageList(startNum,endNum,category,searchWord);
+				
 			}
 					
 			List<String> pageNavi = dao.getPageNavi(cpage,category,searchWord);
 			
-			if(searchWord!=null&&!searchWord.contentEquals("")) {
-				List<BoardDTO> searchlist= dao.search(category, searchWord);
-			}
-			request.setAttribute("searchList", list);
+			List<BoardDTO> searchList = null;
+		    if(searchWord==null||searchWord.contentEquals("")) {
+		    }else {
+		     searchList = dao.search(category, searchWord);
+		    }
+			
+			request.setAttribute("searchList", searchList);
 			request.setAttribute("list", list);
 			request.setAttribute("navi", pageNavi);
 			request.setAttribute("category", category);
@@ -84,9 +89,15 @@ public class BoardController extends HttpServlet {
 			dao.view_count(board_seq); // 조회수 올리는 코드
 			BoardDTO dto = dao.detail(board_seq);  //게시글의 디테일 내용 가져오기
 			List<CommentsDTO> cmtlist = cdao.getCommentsList(board_seq); // 댓글 목록을 가져오는 코드
+			
+			
 			List<FileDTO> flist = fdao.fileList(board_seq);  //게시글의 첨부파일 리스트 가져오기
 			
 			String login = "ee";
+			
+			response.setCharacterEncoding("utf8");
+	        response.setContentType("text/html; charset=utf8;");
+	        
 			request.getSession().setAttribute("login", login);
 			request.setAttribute("list", dto);    //게시글의 디테일 내용 전달하기
 			request.setAttribute("cmt", cmtlist);  // 댓글 리스트 전달하기

@@ -371,7 +371,97 @@ $(document).ready(function(){
          });
       } 
    });
+
+
+// Comments delete
+$("#delete").on("click",function(){
+
+   $(this).next().attr("name","board_seq");
+   $(this).next().next().attr("name","cmt_seq");
+   $(this).attr("action","${pageContext.request.contextPath}/delete.cmt");
+   
+   $.ajax({
+      url : "${pageContext.request.contextPath}/delete.cmt",
+      type : "get",
+      dataType:"json"
+   }).done(function(resp){
+      for(let i =0; i<resp.length; i++){
+         
+         console.log(resp)
+         let address = $("<address>");
+         
+         address.append("<a>"+resp[i].id);
+         address.append("<time>"+resp[i].cmt_date);
+         
+         $("#commentsList").append(address);
+         
+      }
+         })
+      
+   });
+
+// Ajax comments 데이터 전송
+$("#sign").click(function(){
+   if($("#comment").val().trim() === ""){
+      alert("댓글을 입력하세요.");
+      $("#comment").val("").focus();
+   }else{
+	  
+      $.ajax({
+         url: "${pageContext.request.contextPath}/write.cmt",
+            type: "post",
+            data: {
+                cmt_content: $("#comment").val(),
+                board_seq: $("#board_seq").val()
+            },
+            success: function () {
+              
+               alert("댓글 등록 완료");
+               
+               $("#comment").val("");
+               getReply();
+            }
+      })
+   }
+})
+
+// 댓글 등록 시, ajax로 데이서 받기
+$("#sign").click(function(){
+    $.ajax({
+      url: "${pageContext.request.contextPath}/write.cmt", //데이터를 가지고올  url
+        type: "post", // post 방식
+        data: "json"
+    }).done(function(resp){
+    
+          let div1 = $("<div>");
+          let div2 = $("<div>");
+          div2.attr("class","comcont");
+          let ul = $("<ul>");
+          let li = $("<li>");
+          let article = $("<article>");
+          let header = $("<header>");
+          let address = $("<address>");
+          let a = $("<a>");
+          let time = $("<time>");
+          
+          div1.append(ul);
+          ul.append(li);
+          li.append(article);
+          article.append(header);
+          header.append(div1);
+          div1.append(address);
+          address.append("By"+ a + resp.id + time + resp.cmt_date);
+          div2.append(resp.cmt_content);
+          
+          $("#cmt").prepend(div1);
+    })
+           
+   })
+
 });
+
+
+
 </script>
 </head>
 <body>
@@ -426,14 +516,14 @@ $(document).ready(function(){
                   ${i.cmt_content}
                   </div>
                   <div class="comcont_btn">
-                  <c:choose>
-                  <c:when test="${i.id eq login}">
+                  
+                  <c:if test="${i.id eq login}">
                   <a href="" class="edit" data-toggle="modal">
                   <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                   <a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
                   <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                  </c:when>
-                  </c:choose>
+                  </c:if>
+                  
                   </div>
                   </article>
                   </li>
@@ -445,8 +535,8 @@ $(document).ready(function(){
                   
                   
                      <h4>Write A Comment</h4>
-                     <form action="${pageContext.request.contextPath}/write.cmt" method="post">
-                        <input type="hidden" value="${list.board_seq}" name="board_seq">
+                     <form action="" method="post">
+                        <input type="hidden" value="${list.board_seq}" name="${list.board_seq}" id="board_seq">
                         <div class="block clear">
                            <label for="comment">Your Comment</label>
                            <br>
@@ -490,6 +580,10 @@ $(document).ready(function(){
                <div class="modal-footer">
                   <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
                   <a href="${pageContext.request.contextPath}/delete.cmt?board_seq=${list.board_seq}"><input type="button" class="btn btn-danger" value="Delete"></a>
+                  
+<!--                   <input type="submit" class="btn btn-danger" value="Delete"> -->
+<%--                   <input type="hidden" name="${list.board_seq}"> --%>
+<%--                   <input type="hidden" name="${i.cmt_seq}"> --%>
                </div>
             </form>
          </div>
