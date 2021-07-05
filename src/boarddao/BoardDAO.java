@@ -311,4 +311,31 @@ public class BoardDAO {
 		         return result;
 		      }
 		   }
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   
+		   // 게시글 수정
+		   public int modify(int board_seq,String reTitle,String reContent,String notice) throws Exception {
+			   String sql ="update board set title=?, content=?, notice=? where board_seq=?";
+			   try(Connection con = this.getConnection(); 
+				   PreparedStatement pstat = con.prepareStatement(sql)){
+				   pstat.setNString(1, reTitle);
+				   pstat.setNString(2, reContent);
+				   pstat.setNString(3, notice);
+				   pstat.setInt(4, board_seq);
+				   int result =pstat.executeUpdate();
+				   con.commit();
+				   return result;
+			   }
+		   }
+		   
+		   
+		   
 }

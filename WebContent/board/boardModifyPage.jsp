@@ -11,17 +11,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <!-- include summernote css/js -->
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
-
-<!-- include summernote-ko-KR -->
-<script src="lang/summernote-ko-KR.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 <style>
 .table-title {        
@@ -180,9 +175,9 @@ $(function(){
 		</div>
     </div>
 
-	
+	 <form id="frm" action="${pageContext.request.contextPath}/modify.bor" method="post" enctype="multipart/form-data">
     <div class="row">
-    <form id="frm" action="${pageContext.request.contextPath}/modify.bor" method="post" enctype="multipart/form-data">
+   		<input type="hidden" name="board_seq" value=${dto.board_seq}>
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
@@ -220,13 +215,13 @@ $(function(){
 			  </div>
 		</div>
 		<div class="input-group" >
-			  <input type="file" class="form-control" id="file2"  name="file2" style="display:inline; width:430px" value=${flist[2].oriName}>
+			  <input type="file" class="form-control" id="file2"  name="file2" style="display:inline; width:430px">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-danger" type="button" id="btn2">삭제</button>
 			  </div>
 		</div>
 		<div class="input-group" >
-			  <input type="file" class="form-control" id="file3"  name="file3" style="display:inline; width:430px" value=${flist[3].oriName}>
+			  <input type="file" class="form-control" id="file3"  name="file3" style="display:inline; width:430px">
 			  <div class="input-group-btn" style="display: inline;">
 				<button class="btn btn-danger" type="button" id="btn3">삭제</button>
 			  </div>
@@ -279,11 +274,15 @@ $(function(){
         <div class="pull-right"><a id="modifyBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 수정</a></div>
       </div> 
     </div>
+    
+    
+</form>
+
 
     </div>
 
-</form>
-</div>
+
+
 
 
 </body>

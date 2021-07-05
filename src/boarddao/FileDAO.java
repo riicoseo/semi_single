@@ -66,4 +66,38 @@ public class FileDAO {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	//파일 삭제 메서드
+	public int delete(int delTargetSeq) throws Exception {
+		String sql ="delete from files where file_seq=?";
+		try(Connection con = this.getConnection(); 
+			PreparedStatement pstat = con.prepareStatement(sql);){
+			pstat.setInt(1, delTargetSeq);
+			int result =pstat.executeUpdate();
+			con.commit();
+			return result;
+		}	
+	}
+	
+	//파일seq로 sysname 찾기
+	public String getSysName(int file_seq) throws Exception {
+		String sql ="select * from files where file_seq =?";
+		String sysName=null;
+		try(Connection con = this.getConnection();  
+				PreparedStatement pstat = con.prepareStatement(sql)){
+			pstat.setInt(1, file_seq);
+			try(ResultSet rs = pstat.executeQuery();){
+				if(rs.next()) {
+					 sysName= rs.getString("sysname");
+				}return sysName;
+			}
+		}
+	}
+	
+	
 }

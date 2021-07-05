@@ -11,17 +11,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <!-- include summernote css/js -->
-<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-<!-- include summernote-ko-KR -->
-<script src="lang/summernote-ko-KR.js"></script>
 
 <style>
 .table-title {        
@@ -85,6 +81,10 @@ $(function(){
 		let title = $("#bbs_title").val();
 		let content = $("#summernoteContent").val();
 		
+		console.log(title);
+		console.log(content);
+		
+		
 		let blankRegex = /\S/;
 		let titleLengthRegex = /^\S{0,66}$/;
 		let contentLengthRegex = /^\S{0,1333}$/;
@@ -137,32 +137,6 @@ $(function(){
 
 
 
-
-// $(document).ready(function(){
-   
-   
-// })
-
-// $(function() {
-//   $('#summernote').summernote({
-//     height: 300,
-//     lang: 'ko-KR' // 언어 세팅
-//   });
-// });
-
-
-
-// get
-//var markupStr = $('#summernote').summernote('code');
-
-// set
-// var markupStr = 'hello world';
-// $('#summernote').summernote('code', markupStr);
-
-// 페이지를 렌더링 할 때 textarea 태그에 값을 넣어서 바로 불러올 수도 있는 것 같다.
-// PHP코드라면...
-// <textarea id="summernote"><?= $contents ?></textarea>
-
 </script>
 
 </head>
@@ -178,9 +152,8 @@ $(function(){
 		</div>
     </div>
 
-	
-    <div class="row">
-    <form id="frm" action="${pageContext.request.contextPath}/save.bor" method="post" enctype="multipart/form-data">
+	<form id="frm" action="${pageContext.request.contextPath}/save.bor" method="post" enctype="multipart/form-data">
+    <div class="row"> 
       <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
         <div class="col-sm-10 writeDiv">
@@ -268,11 +241,11 @@ $(function(){
         <div class="pull-right"><a id="saveBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
       </div> 
     </div>
-
+</form>
     </div>
 
-</form>
-</div>
+
+
 
 
 </body>

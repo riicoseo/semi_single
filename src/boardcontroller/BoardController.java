@@ -104,7 +104,7 @@ public class BoardController extends HttpServlet {
 			
 			if(!fileFolder.exists()) { fileFolder.mkdir();}
 			
-			MultipartRequest multi = new   MultipartRequest(request,filePath, FileConfig.uploadMaxSize,"utf8",new DefaultFileRenamePolicy());
+			MultipartRequest multi = new MultipartRequest(request,filePath, FileConfig.uploadMaxSize,"utf8",new DefaultFileRenamePolicy());
 			
 			
 			
@@ -149,7 +149,7 @@ public class BoardController extends HttpServlet {
             
             
             
-            
+            //=================
             
             
 		}else if(cmd.contentEquals("/modifyPage.bor")) {
@@ -162,6 +162,51 @@ public class BoardController extends HttpServlet {
 			request.getRequestDispatcher("board/boardModifyPage.jsp").forward(request, response);
 			
 		}else if(cmd.contentEquals("/modify.bor")) {
+			String filePath= request.getServletContext().getRealPath("files");
+			
+			MultipartRequest multi = new MultipartRequest(request,filePath,FileConfig.uploadMaxSize,"utf-8",new DefaultFileRenamePolicy());
+			
+			// 1번. 게시글 내용 수정
+			int board_seq = Integer.parseInt(multi.getParameter("board_seq"));
+			String reTitle = dao.XSSFilter(multi.getParameter("title"));
+			String reContent = dao.XSSFilter(multi.getParameter("content"));
+			String notice = multi.getParameter("notice");
+			
+			dao.modify(board_seq,reTitle,reContent,notice);
+			
+			
+			// 2번. 삭제된 첨부파일을 실제로 DB와 폴더에서 삭제하기 
+			String[] delFiles = multi.getParameterValues("delFiles");
+			if(delFiles!=null) {
+			for(String delTargetSeq : delFiles) {
+				//String oriName = multi.getOriginalFileName(delTarget);
+				String sysName = fdao.getSysName(Integer.parseInt(delTargetSeq));
+				
+				
+				File delTargetFile = new File(filePath+"/"+sysName);
+				System.out.println(delTargetFile);
+				boolean delResult = delTargetFile.delete();
+				System.out.println(delResult);
+				if(delResult) {
+					fdao.delete(Integer.parseInt(delTargetSeq));
+				}
+			}				
+			}
+			
+			
+			// 3번. 새로 추가된 첨부파일을 실제로 DB와 폴더에 추가하기
+			Set<String> newFiles = multi.getFileNameSet();
+			for(String newfile :newFiles) {
+				String oriName = multi.getOriginalFileName(newfile);
+				String sysName = multi.getFilesystemName(newfile);
+				if(oriName!=null) {
+				int result = fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+				System.out.println("새로 추가된 첨부파일을 실제 DB에 저장한 결과는? "+result);
+				}
+			}
+			
+			//4번. 모든 수정, 삭제 과정 마무리 후, board_seq 가지고 detail.bor 을 통해서 boardDetailPage.jsp 로 넘어가기
+			response.sendRedirect("detail.bor?board_seq="+ board_seq);
 			
 		}
 		
