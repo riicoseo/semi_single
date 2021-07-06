@@ -53,7 +53,7 @@ public class FileController extends HttpServlet {
 			byte[] fileSpace = new byte[(int)targetFile.length()];
 			dis.readFully(fileSpace);
 			
-			//oriName = new String(oriName.getBytes("utf-8"),"iso-8859-1");
+			oriName = new String(oriName.getBytes("utf-8"),"iso-8859-1");
 			
 			response.reset();
 			response.setContentType("application/octet-stream");
