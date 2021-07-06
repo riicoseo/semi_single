@@ -126,11 +126,11 @@ public class BoardController extends HttpServlet {
 			String title = multi.getParameter("title");
 			String content = multi.getParameter("content");
 			String notice = multi.getParameter("notice");
-			System.out.println(content);
-			//String notice = "N";
-			title = dao.XSSFilter(title);
-			content = dao.XSSFilter(content);
-			System.out.println(content);
+			
+			
+			//title = dao.XSSFilter(title);
+			//content = dao.XSSFilter(content);
+			
 			int board_seq= dao.getSeq();
 			String id="ee";
 			
@@ -139,15 +139,26 @@ public class BoardController extends HttpServlet {
 			
 			//파일 첨부 저장
 			Set<String> fileNames = multi.getFileNameSet();
+			//System.out.println("--------------------");
+			//System.out.println("fileNames는 ? "+fileNames);
 			for(String fileName :fileNames) {
-				
+				//System.out.println("파일 한 개의 이름은 ? "+fileName);
 				String oriName = multi.getOriginalFileName(fileName);
 				String sysName = multi.getFilesystemName(fileName);
+				//System.out.println("파일 오리네임은 ? "+oriName);
+				//System.out.println("파일 sysName은 ? "+sysName);
+				//System.out.println("====================");
 				
 				if(oriName!=null) {
 					fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
 				}
 			}
+			
+			
+			//썸머노트 이미지 저장
+			
+			
+			
 			
 			response.sendRedirect("detail.bor?board_seq="+board_seq);
 			

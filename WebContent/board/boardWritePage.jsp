@@ -77,14 +77,14 @@ $(function(){
 	
 	$("#saveBtn").on("click",function(){
 		
-		$("#summernote").val($(".note-editable").text());
+		//$("#summernote").val($(".note-editable").text());
 		let title = $("#bbs_title").val();
 		let content = $("#summernote").val();
 		
 		
 		let blankRegex = /\S/;
-		let titleLengthRegex = /^\S{0,66}$/;
-		let contentLengthRegex = /^\S{0,1333}$/;
+		let titleLengthRegex = /^\S.{0,65}$/;
+		let contentLengthRegex = /^\S.{0,1332}$/;
 		
 		let bresult1 = blankRegex.test(title);
 		let bresult2 = blankRegex.test(content);
@@ -103,6 +103,7 @@ $(function(){
 		}
 		else{
 			$("#frm").submit();
+			
 		}
 	})
 	
@@ -119,13 +120,51 @@ $(function(){
 	
 	
 	
-	$('#summernote').summernote({
-        placeholder: 'Write contents',
-        height: 400,
-        minHeight: 300,             // set minimum height of editor
-        maxHeight: 300,             // set maximum height of editor
-        lang: 'ko-KR'
-      });
+	
+	
+	 $('#summernote').summernote({
+	        placeholder: 'Write contents',
+	        height: 400,
+	        minHeight: 300,             // set minimum height of editor
+	        maxHeight: 300,             // set maximum height of editor
+	        codeviewFilter: true,
+	        codeviewIframeFilter: true,
+	        callbacks:{
+	            onImageUpload:function(files) {
+	                
+	                
+	                 let editor = this;   // SummerNote 인스턴스의 주소를 Editor 변수에 저장
+	                 
+	                 let file = files[0];      //업로드 해야 하는 파일 인스턴스
+	               
+	                 let form = new FormData();     // <form> 태그 생성
+	                 form.append("file",file);    // form 태그 내부에 파일 인스턴스 append 하면 자동으로   <input type=file> 이란 코드 생성되고, name 값에는 "file" 이라고 내가 지정해준 것이다.
+	      
+	                 
+	                 $.ajax({
+	                    data:form,
+	                    type:"post",
+	                    url:"${pageContext.request.contextPath}/upload.file",
+	                    contentType:false,   //내가 보내는 데이터의 타입이 Multipart/form-data 라고 해주는 설정 같은 코드 
+	                    processData:false  //업로드 하는 파일을 get 방식이나 post 방식의 '텍스트'로 변경하는 작업을 안하겠다! 하는 코드 (텍스트화 하지 않고, 파일 그대로를 업로드하겟다!)
+	                 }).done(function(resp){
+	                   
+	                   $(editor).summernote('insertImage',"${pageContext.request.contextPath}"+resp); //editor 인스턴스의 insertImage 기능으로 이미지를 화면에 출력
+	                   
+	                 });
+	                 
+	                 
+	                 
+	               }
+	              
+	           }
+	        
+	      });
+
+	
+	
+	
+	
 	
 })
 
@@ -168,9 +207,7 @@ $(function(){
        <div class="form-group">
         <label for="inputEmail3" class="col-sm-2 control-label">첨부파일</label>
         <div class="col-sm-10 writeDiv">
-<!--           <input type="file" class="form-control" id="file1"  name="file1"><button id="btn1" type="button" class="btn btn-danger btn-sm">삭제</button> -->
-<!--           <input type="file" class="form-control" id="file2"  name="file2"><button id="btn2" type="button" class="btn btn-danger">삭제</button> -->
-<!--           <input type="file" class="form-control" id="file3"  name="file3"><button id="btn3" type="button" class="btn btn-danger">삭제</button> -->
+
        
         <div class="input-group" >
 			  <input type="file" class="form-control" id="file1"  name="file1" style="display:inline; width:430px">
@@ -226,7 +263,9 @@ $(function(){
 	</div> 
 
 
-
+	<div id="imgtest">
+		
+	</div>
 		
 
 
