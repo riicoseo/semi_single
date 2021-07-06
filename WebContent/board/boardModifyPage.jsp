@@ -77,20 +77,34 @@ $(function(){
 	
 	
 	$("#modifyBtn").on("click",function(){
-		$("#summernoteContent").val($(".note-editable").text());
 		
+		//$("#summernote").val($(".note-editable").text());
 		let title = $("#bbs_title").val();
-		let content = $("#summernoteContent").val();
+		let content = $("#summernote").val();
+		console.log(content);
 		
-		let regex = /\S/;
-		let result1 = regex.test(title);
-		let result2 = regex.test(content);
-		if(!result1){
+		let blankRegex = /\S/;
+		let titleLengthRegex = /^\S.{0,65}$/;
+		let contentLengthRegex = /^\S.{0,1332}$/;
+		
+		let bresult1 = blankRegex.test(title);
+		let bresult2 = blankRegex.test(content);
+		
+		let titleResult = titleLengthRegex.test(title);
+		let contentResult = contentLengthRegex.test(content);
+		
+		if(!bresult1){
 			alert("제목을 반드시 입력해주세요!");
-		}else if(!result2){
+		}else if(!bresult2){
 			alert("내용을 입력해주세요!");
-		}else{
+		}else if(!titleResult){
+			alert("제목은 66글자 이내로 작성해주세요.")
+		}else if(!contentResult){
+			alert("내용은 1,333글자 이내로 작성해주세요.")
+		}
+		else{
 			$("#frm").submit();
+			
 		}
 	})
 	
@@ -124,8 +138,36 @@ $(function(){
         height: 400,
         minHeight: 300,             // set minimum height of editor
         maxHeight: 300,             // set maximum height of editor
-        lang: 'ko-KR'
+        codeviewFilter: true,
+        codeviewIframeFilter: true,
+        callbacks:{
+            onImageUpload:function(files) {
+                
+                
+                 let editor = this;   // SummerNote 인스턴스의 주소를 Editor 변수에 저장
+                 
+                 let file = files[0];      //업로드 해야 하는 파일 인스턴스
+               
+                 let form = new FormData();     // <form> 태그 생성
+                 form.append("file",file);    // form 태그 내부에 파일 인스턴스 append 하면 자동으로   <input type=file> 이란 코드 생성되고, name 값에는 "file" 이라고 내가 지정해준 것이다.
+      
+                 
+                 $.ajax({
+                    data:form,
+                    type:"post",
+                    url:"${pageContext.request.contextPath}/upload.file",
+                    contentType:false,   //내가 보내는 데이터의 타입이 Multipart/form-data 라고 해주는 설정 같은 코드 
+                    processData:false  //업로드 하는 파일을 get 방식이나 post 방식의 '텍스트'로 변경하는 작업을 안하겠다! 하는 코드 (텍스트화 하지 않고, 파일 그대로를 업로드하겟다!)
+                 }).done(function(resp){
+                   
+                   $(editor).summernote('insertImage',"${pageContext.request.contextPath}"+resp); //editor 인스턴스의 insertImage 기능으로 이미지를 화면에 출력                 
+                 });               
+               }
+           }       
       });
+	
+	
+	
 	
 })
 
@@ -159,7 +201,7 @@ $(function(){
       <div class="form-group">
         <label for="inputPassword3" class="col-sm-2 control-label">contents</label>
         <div class="col-sm-10 writeDiv">
-          <div id="summernote" name="content">${dto.content}</div>
+          <textarea cols="3" name="content" id="summernote">${dto.content}</textarea>
         </div>
       </div>
        
@@ -241,7 +283,7 @@ $(function(){
       <hr>
       <div class="col-12">
         <button type="button" id="backBtn" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
-        <textarea cols="3" name="content" id="summernoteContent" style="display:none"></textarea>
+        
         <div class="pull-right"><a id="modifyBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 수정</a></div>
       </div> 
     </div>
