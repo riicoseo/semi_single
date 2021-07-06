@@ -43,8 +43,8 @@ public class BoardDAO {
 			while(rs.next()) {
 				int board_seq = rs.getInt("board_seq");
 				String id = rs.getNString("id");
-				String title = rs.getNString("title");
-				String content =rs.getNString("content");
+				String title = this.ReXSSFilter(rs.getNString("title"));
+				String content =this.ReXSSFilter(rs.getNString("content"));
 				Date write_date = rs.getDate("write_date");
 				int view_count = rs.getInt("view_count");
 				String notice = rs.getNString("notice");
@@ -65,8 +65,8 @@ public class BoardDAO {
 				if(rs.next()) {
 					dto.setBoard_seq(rs.getInt("board_seq"));
 					dto.setId(rs.getNString("id"));
-					dto.setTitle(rs.getString("title"));
-					dto.setContent(rs.getString("content"));
+					dto.setTitle(this.ReXSSFilter(rs.getString("title")));
+					dto.setContent(this.ReXSSFilter(rs.getString("content")));
 					dto.setWrite_date(rs.getDate("write_date"));
 					dto.setView_count(rs.getInt("view_count"));
 					dto.setNotice(rs.getNString("notice"));
@@ -81,6 +81,17 @@ public class BoardDAO {
 			target = target.replaceAll("<","&lt;");	
 			target = target.replaceAll(">","&gt;");		
 			target = target.replaceAll("&","&amp;");		
+		}
+		return target;
+	}
+	
+	
+	// XSSFilter 역으로 다시 해서 화면에 뿌리기
+	public String ReXSSFilter(String target) {
+		if(target!=null){
+			target = target.replaceAll("&lt;","<");	
+			target = target.replaceAll("&gt;",">");		
+			target = target.replaceAll("&amp;","&");		
 		}
 		return target;
 	}
@@ -110,8 +121,8 @@ public class BoardDAO {
 						while(rs.next()) {
 						  int board_seq = rs.getInt("board_seq");
 						  String id = rs.getNString("id");
-						  String title = rs.getString("title");
-						  String content = rs.getString("content");
+						  String title = this.ReXSSFilter(rs.getString("title"));
+						  String content = this.ReXSSFilter(rs.getString("content"));
 						  Date write_date = rs.getDate("write_date");
 					      int view_count = rs.getInt("view_count");
 					      String notice = rs.getNString("notice");
@@ -231,8 +242,8 @@ public class BoardDAO {
 				while (rs.next()) {
 					int board_seq = rs.getInt("board_seq");
 					String id = rs.getNString("id");
-					String title = rs.getString("title");
-					String content = rs.getString("content");
+					String title = this.ReXSSFilter(rs.getString("title"));
+					String content = this.ReXSSFilter(rs.getString("content"));
 					Date write_date = rs.getDate("write_date");
 					int view_count = rs.getInt("view_count");
 					String notice = rs.getNString("notice");
@@ -260,8 +271,8 @@ public class BoardDAO {
 					while (rs.next()) {
 						int board_seq = rs.getInt("board_seq");
 						String id = rs.getNString("id");
-						String title = rs.getString("title");
-						String content = rs.getString("content");
+						String title = this.ReXSSFilter(rs.getString("title"));
+						String content = this.ReXSSFilter(rs.getString("content"));
 						Date write_date = rs.getDate("write_date");
 						int view_count = rs.getInt("view_count");
 						String notice = rs.getNString("notice");

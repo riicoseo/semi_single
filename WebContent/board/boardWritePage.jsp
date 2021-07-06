@@ -76,13 +76,10 @@ $(function(){
 	
 	
 	$("#saveBtn").on("click",function(){
-		$("#summernoteContent").val($(".note-editable").text());
 		
+		$("#summernote").val($(".note-editable").text());
 		let title = $("#bbs_title").val();
-		let content = $("#summernoteContent").val();
-		
-		console.log(title);
-		console.log(content);
+		let content = $("#summernote").val();
 		
 		
 		let blankRegex = /\S/;
@@ -164,7 +161,7 @@ $(function(){
       <div class="form-group">
         <label for="inputPassword3" class="col-sm-2 control-label">contents</label>
         <div class="col-sm-10 writeDiv">
-          <div id="summernote" name="content"></div>
+          <textarea cols="3" name="content" id="summernote"></textarea>
         </div>
       </div>
        
@@ -237,7 +234,7 @@ $(function(){
       <hr>
       <div class="col-12">
         <button type="button" id="backBtn" class="btn btn-default pull-left" style="background-color: #00285b; color:white">목록</button>
-        <textarea cols="3" name="content" id="summernoteContent" style="display:none"></textarea>
+        
         <div class="pull-right"><a id="saveBtn" class="btn btn-info boardAddBtn"><span class="glyphicon glyphicon-pencil"></span> 등록</a></div>
       </div> 
     </div>

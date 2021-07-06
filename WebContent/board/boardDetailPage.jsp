@@ -374,91 +374,77 @@ $(document).ready(function(){
 
 
 // Comments delete
-$("#delete").on("click",function(){
-
-   $(this).next().attr("name","board_seq");
-   $(this).next().next().attr("name","cmt_seq");
-   $(this).attr("action","${pageContext.request.contextPath}/delete.cmt");
-   
-   $.ajax({
-      url : "${pageContext.request.contextPath}/delete.cmt",
-      type : "get",
-      dataType:"json"
-   }).done(function(resp){
-      for(let i =0; i<resp.length; i++){
-         
-         console.log(resp)
-         let address = $("<address>");
-         
-         address.append("<a>"+resp[i].id);
-         address.append("<time>"+resp[i].cmt_date);
-         
-         $("#commentsList").append(address);
-         
-      }
-         })
-      
+   $("#cmtdelete").on("click", function() {
+      $.ajax({
+         url : "${pageContext.request.contextPath}/delete.cmt",
+         type : "post",
+         dataType : "json",
+         data : {
+            board_seq : $("#board_seq").val(),
+            cmt_seq : $("#cmt_seq").val()
+         }
+      })
    });
 
-// Ajax comments 데이터 전송
-$("#sign").click(function(){
-   if($("#comment").val().trim() === ""){
-      alert("댓글을 입력하세요.");
-      $("#comment").val("").focus();
-   }else{
-	  
-      $.ajax({
-         url: "${pageContext.request.contextPath}/write.cmt",
-            type: "post",
-            data: {
-                cmt_content: $("#comment").val(),
-                board_seq: $("#board_seq").val()
-            },
-            success: function () {
-              
-               alert("댓글 등록 완료");
-               
-               $("#comment").val("");
-               getReply();
-            }
-      })
-   }
-})
-
-// 댓글 등록 시, ajax로 데이서 받기
-$("#sign").click(function(){
-    $.ajax({
-      url: "${pageContext.request.contextPath}/write.cmt", //데이터를 가지고올  url
-        type: "post", // post 방식
-        data: "json"
-    }).done(function(resp){
-    
-          let div1 = $("<div>");
-          let div2 = $("<div>");
-          div2.attr("class","comcont");
-          let ul = $("<ul>");
-          let li = $("<li>");
-          let article = $("<article>");
-          let header = $("<header>");
-          let address = $("<address>");
-          let a = $("<a>");
-          let time = $("<time>");
-          
-          div1.append(ul);
-          ul.append(li);
-          li.append(article);
-          article.append(header);
-          header.append(div1);
-          div1.append(address);
-          address.append("By"+ a + resp.id + time + resp.cmt_date);
-          div2.append(resp.cmt_content);
-          
-          $("#cmt").prepend(div1);
-    })
-           
+   
+   // Ajax comments 데이터 전송
+   $("#sign").click(function(){
+      if($("#comment").val().trim() === ""){
+         alert("댓글을 입력하세요.");
+         $("#comment").val("").focus();
+      }else{
+         $.ajax({
+            url: "${pageContext.request.contextPath}/write.cmt",
+               type: "post",
+               data: {
+                   cmt_content : $("#comment").val(),
+                   board_seq : $("#board_seq").val()
+               },
+               success: function () {
+                 
+                  alert("댓글 등록 완료");
+                  
+                  $("#comment").val("");
+                  getReply();
+               }
+         })
+      }
    })
-
-});
+   
+   // 댓글 등록 시, ajax로 데이서 받기
+   $("#sign").click(function(){
+       $.ajax({
+         url: "${pageContext.request.contextPath}/write.cmt", //데이터를 가지고올  url
+           type: "post", // post 방식
+           data: "json"
+       }).done(function(resp){
+       
+             let div1 = $("<div>");
+             let div2 = $("<div>");
+             div2.attr("class","comcont");
+             let ul = $("<ul>");
+             let li = $("<li>");
+             let article = $("<article>");
+             let header = $("<header>");
+             let address = $("<address>");
+             let a = $("<a>");
+             let time = $("<time>");
+             
+             div1.append(ul);
+             ul.append(li);
+             li.append(article);
+             article.append(header);
+             header.append(div1);
+             div1.append(address);
+             address.append("By"+ a + resp.id + time + resp.cmt_date);
+             div2.append(resp.cmt_content);
+             
+             $("#cmt").prepend(div1);
+       })
+              
+      })
+   
+})
 
 
 
@@ -518,6 +504,7 @@ $("#sign").click(function(){
                   <div class="comcont_btn">
                   
                   <c:if test="${i.id eq login}">
+                   <input type="hidden" value="${i.cmt_seq}" name="${i.cmt_seq}" id="cmt_seq">
                   <a href="" class="edit" data-toggle="modal">
                   <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                   <a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
@@ -551,39 +538,62 @@ $("#sign").click(function(){
             <c:choose>
                <c:when test="${login eq list.id}">
                   <a href="${pageContext.request.contextPath}/modifyPage.bor?board_seq=${list.board_seq}" class="btn btn-primary">수정하기</a>
-                  <a href="${pageContext.request.contextPath}/delete.bor?board_seq=${list.board_seq}" class="btn btn-danger">삭제하기</a>
+                  <a href="#boardDeleteForm" class="btn btn-danger" data-toggle="modal" >삭제하기</a>
                </c:when>
             </c:choose>
             </div>
             <div align="right">
-            <a href="javascript:history.back()" class="btn btn-secondary">목록으로</a>
+            <a href="${pageContext.request.contextPath}/list.bor?cpage=1" class="btn btn-secondary">목록으로</a>
          </div>
          </div>
       </div>
    </div>
-   <!-- Delete Modal HTML -->
+    <!-- Comments Delete Modal HTML -->
    <div id="deleteEmployeeModal" class="modal fade">
       <div class="modal-dialog">
          <div class="modal-content">
-            <form>
+            <form action="" method="post">
                <div class="modal-header">
-                  <h4 class="modal-title">Delete Employee</h4>
+                  <h4 class="modal-title">댓글을 삭제하시겠습니까?</h4>
                   <button type="button" class="close" data-dismiss="modal"
                      aria-hidden="true">&times;</button>
                </div>
                <div class="modal-body">
-                  <p>Are you sure you want to delete these Records?</p>
+                  
                   <p class="text-warning">
-                     <small>This action cannot be undone.</small>
+                     <p>삭제된 댓글은 복구할 수 없습니다.</p>
                   </p>
                </div>
                <div class="modal-footer">
-                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                  <a href="${pageContext.request.contextPath}/delete.cmt?board_seq=${list.board_seq}"><input type="button" class="btn btn-danger" value="Delete"></a>
-                  
-<!--                   <input type="submit" class="btn btn-danger" value="Delete"> -->
-<%--                   <input type="hidden" name="${list.board_seq}"> --%>
-<%--                   <input type="hidden" name="${i.cmt_seq}"> --%>
+                  <input type="button" class="btn btn-default" data-dismiss="modal" value="취소">
+                  <input type="hidden" name="${list.board_seq}" value="${list.board_seq}" id="board_seq">
+                  <input type="hidden" name="${i.cmt_seq}" value="${i.cmt_seq}" id="">
+                  <input type="submit" class="btn btn-danger" value="삭제" id="cmtdelete">
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   <!-- Board Delete Modal HTML -->
+   <div id="boardDeleteForm" class="modal fade">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <form action="${pageContext.request.contextPath}/delete.bor?board_seq=${list.board_seq}" method="post">
+               <div class="modal-header">
+                  <h4 class="modal-title">게시글을 삭제하시겠습니까?</h4>
+                  <button type="button" class="close" data-dismiss="modal"
+                     aria-hidden="true">&times;</button>
+               </div>
+               <div class="modal-body">
+                  <p>삭제된 게시글은 복구할 수 없습니다.</p>
+                  <p class="text-warning">
+                     <small>해당 게시글의 댓글 또한 삭제됩니다.</small>
+                  </p>
+               </div>
+               <div class="modal-footer">
+                  <input type="button" class="btn btn-default" data-dismiss="modal" value="취소">
+                  <input type="hidden" name="${list.board_seq}" value="${list.board_seq}" id="board_seq">
+                  <input type="submit" class="btn btn-danger" value="삭제" id="boardDelete">
                </div>
             </form>
          </div>

@@ -37,11 +37,10 @@ public class CommentsController extends HttpServlet {
       try {
          if(cmd.contentEquals("/write.cmt")) {
 //            MemberDTO str = ((MemberDTO)request.getSession().getAttribute("login"));
-            String id = "ee";
+            String id = "test";
             String cmt_content = request.getParameter("cmt_content");
             cmt_content = dao.XSSFilter(cmt_content);
             int board_seq = Integer.parseInt(request.getParameter("board_seq"));
-            System.out.println("보드시퀀스는 "+board_seq);
             
             int cmt_seq = cdao.getcmt_seq();
             cdao.insert(cmt_seq, id, cmt_content, board_seq);
@@ -54,11 +53,15 @@ public class CommentsController extends HttpServlet {
             
          }else if(cmd.contentEquals("/delete.cmt")) {
             
-            int cmt_seq = Integer.parseInt(request.getParameter("cmt_seq"));
-            int board_seq = Integer.parseInt(request.getParameter("board_seq"));
-            int result = cdao.delete(cmt_seq);
+            System.out.println("delete");
             
-            response.sendRedirect("detail.bor?board_seq="+board_seq);
+            int board_seq = Integer.parseInt(request.getParameter("board_seq"));
+            System.out.println(board_seq);
+            int cmt_seq = Integer.parseInt(request.getParameter("cmt_seq"));
+            System.out.println(cmt_seq);
+            cdao.delete(cmt_seq);
+            
+            response.sendRedirect("/detail.bor?board_seq="+board_seq);
             
          }else if(cmd.contentEquals("/update.cmt")){
             

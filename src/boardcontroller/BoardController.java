@@ -89,7 +89,8 @@ public class BoardController extends HttpServlet {
 			dao.view_count(board_seq); // 조회수 올리는 코드
 			BoardDTO dto = dao.detail(board_seq);  //게시글의 디테일 내용 가져오기
 			List<CommentsDTO> cmtlist = cdao.getCommentsList(board_seq); // 댓글 목록을 가져오는 코드
-			
+			String result = g.toJson(cmtlist);
+
 			
 			List<FileDTO> flist = fdao.fileList(board_seq);  //게시글의 첨부파일 리스트 가져오기
 			
@@ -125,10 +126,11 @@ public class BoardController extends HttpServlet {
 			String title = multi.getParameter("title");
 			String content = multi.getParameter("content");
 			String notice = multi.getParameter("notice");
+			System.out.println(content);
 			//String notice = "N";
 			title = dao.XSSFilter(title);
 			content = dao.XSSFilter(content);
-			
+			System.out.println(content);
 			int board_seq= dao.getSeq();
 			String id="ee";
 			

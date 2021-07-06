@@ -131,35 +131,6 @@ $(function(){
 
 
 
-
-
-
-
-// $(document).ready(function(){
-   
-   
-// })
-
-// $(function() {
-//   $('#summernote').summernote({
-//     height: 300,
-//     lang: 'ko-KR' // 언어 세팅
-//   });
-// });
-
-
-
-// get
-//var markupStr = $('#summernote').summernote('code');
-
-// set
-// var markupStr = 'hello world';
-// $('#summernote').summernote('code', markupStr);
-
-// 페이지를 렌더링 할 때 textarea 태그에 값을 넣어서 바로 불러올 수도 있는 것 같다.
-// PHP코드라면...
-// <textarea id="summernote"><?= $contents ?></textarea>
-
 </script>
 
 </head>
