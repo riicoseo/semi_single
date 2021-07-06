@@ -76,7 +76,7 @@ public class FileController extends HttpServlet {
 			
 			
 			
-			fdao.fileWrite(new FileDTO(0,oriName,sysName,null,0));
+			fdao.summerWrite(new FileDTO(0,oriName,sysName,null,0));
 			
 			String returnPath = "/files/"+sysName;
 			

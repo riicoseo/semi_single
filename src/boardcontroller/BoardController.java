@@ -143,14 +143,20 @@ public class BoardController extends HttpServlet {
 			//System.out.println("fileNames는 ? "+fileNames);
 			for(String fileName :fileNames) {
 				//System.out.println("파일 한 개의 이름은 ? "+fileName);
-				String oriName = multi.getOriginalFileName(fileName);
+				if(fileName.contentEquals("files")) {
+					String oriName = multi.getOriginalFileName(fileName);
+					String sysName = multi.getFilesystemName(fileName);
+					fdao.summerWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+					
+				}else{String oriName = multi.getOriginalFileName(fileName);
 				String sysName = multi.getFilesystemName(fileName);
 				//System.out.println("파일 오리네임은 ? "+oriName);
 				//System.out.println("파일 sysName은 ? "+sysName);
 				//System.out.println("====================");
-				
+
 				if(oriName!=null) {
 					fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+				}
 				}
 			}
 			
@@ -192,8 +198,8 @@ public class BoardController extends HttpServlet {
 			
 			// 1번. 게시글 내용 수정
 			int board_seq = Integer.parseInt(multi.getParameter("board_seq"));
-			String reTitle = dao.XSSFilter(multi.getParameter("title"));
-			String reContent = dao.XSSFilter(multi.getParameter("content"));
+			String reTitle = multi.getParameter("title");
+			String reContent = multi.getParameter("content");
 			String notice = multi.getParameter("notice");
 			
 			dao.modify(board_seq,reTitle,reContent,notice);
@@ -208,9 +214,7 @@ public class BoardController extends HttpServlet {
 				
 				
 				File delTargetFile = new File(filePath+"/"+sysName);
-				System.out.println(delTargetFile);
 				boolean delResult = delTargetFile.delete();
-				System.out.println(delResult);
 				if(delResult) {
 					fdao.delete(Integer.parseInt(delTargetSeq));
 				}
@@ -219,15 +223,25 @@ public class BoardController extends HttpServlet {
 			
 			
 			// 3번. 새로 추가된 첨부파일을 실제로 DB와 폴더에 추가하기
-			Set<String> newFiles = multi.getFileNameSet();
-			for(String newfile :newFiles) {
-				String oriName = multi.getOriginalFileName(newfile);
-				String sysName = multi.getFilesystemName(newfile);
-				if(oriName!=null) {
-				int result = fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
-				System.out.println("새로 추가된 첨부파일을 실제 DB에 저장한 결과는? "+result);
+			Set<String> fileNames = multi.getFileNameSet();
+			for(String fileName :fileNames) {		
+				if(fileName.contentEquals("files")) {
+					String oriName = multi.getOriginalFileName(fileName);
+					String sysName = multi.getFilesystemName(fileName);
+					if(oriName!=null) {
+					fdao.summerWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+					}
+					
+				}else{String oriName = multi.getOriginalFileName(fileName);
+				String sysName = multi.getFilesystemName(fileName);
+			
+					if(oriName!=null) {
+					fdao.fileWrite(new FileDTO(0,oriName,sysName,null,board_seq));
+					}
 				}
 			}
+			
+			
 			
 			//4번. 모든 수정, 삭제 과정 마무리 후, board_seq 가지고 detail.bor 을 통해서 boardDetailPage.jsp 로 넘어가기
 			response.sendRedirect("detail.bor?board_seq="+ board_seq);

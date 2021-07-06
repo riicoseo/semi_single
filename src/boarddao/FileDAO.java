@@ -46,6 +46,23 @@ public class FileDAO {
 	}
 	
 	
+	//썸머노트 이미지 DB 저장
+	public int summerWrite(FileDTO dto) throws Exception {
+		String sql ="insert into summernote values(summer_seq.nextval, ?,?,sysdate,?)";
+		try(Connection con = this.getConnection(); 
+			PreparedStatement pstat = con.prepareStatement(sql)){
+			pstat.setString(1,dto.getOriName());
+			pstat.setString(2,dto.getSysName());
+			pstat.setInt(3, dto.getBoard_seq());
+			
+			int result =pstat.executeUpdate();
+			con.commit();
+			return result;
+		}
+	}
+	
+	
+	
 	public List<FileDTO> fileList(int board_seq) throws Exception {
 		String sql ="select * from files where board_seq=?";
 		List<FileDTO> flist = new ArrayList<FileDTO>();
